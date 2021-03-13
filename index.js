@@ -1,33 +1,47 @@
-const Discord = require("discord.js");
-const fs = require("fs");
-const { bot_secret_token, prefix } = require("./config.json");
+const express = require("express");
+const app = express();
+require("dotenv").config();
+const cors = require("cors");
+const mongoose = require("mongoose");
 
-const client = new Discord.Client();
-client.commands = new Discord.Collection();
-const commandFiles = fs
-  .readdirSync("./commands")
-  .filter((file) => file.endsWith(".js"));
+app.use(cors({ origin: `${process.env.CLIENT_URL}`, credentials: true }));
 
-for (commandFile of commandFiles) {
-  const command = require(`./commands/${commandFile}`);
-  client.commands.set(command.name, command);
-}
-
-client.once("ready", () => {
-  console.log("Connected as " + client.user.tag);
-});
-
-client.on("message", (message) => {
-  if (!message.content.startsWith(prefix) || message.author.bot) return;
-  const args = message.content.slice(prefix.length).trim().split(/ +/);
-  const command = args.shift().toLowerCase();
-  if (!client.commands.has(command)) return;
-  try {
-    client.commands.get(command).execute(message, args);
-  } catch (error) {
-    console.error(error);
-    message.reply("there was an error trying to execute that command!");
+// * DB
+mongoose.connect(
+  process.env.MONGO_URI,
+  {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true,
+  },
+  (err) => {
+    if (err) return console.log("Connection to MongoDB failed.\n", err);
+    console.log("Connected to MongoDB");
   }
-});
+);
 
-client.login(bot_secret_token);
+// * Route imports
+const faq = require("./routes/faq");
+
+// * Routes
+app.use("/api/faq", faq);
+
+// * Server
+const port = process.env.PORT || 5000;
+const server = app.listen(port, console.log(`Server started on port ${port}`));
+
+// * Discord Bot
+require("./bot/bot.js");
+
+// * Production setup
+if (process.env.NODE_ENV === "production") {
+  // * Handle unhandled promise exceptions
+  process.on("uncaughtException", (err, promise) => {
+    console.log(`Error: ${err.message}`);
+  });
+  // * Handle unhandled promise rejections
+  process.on("unhandledRejection", (err, promise) => {
+    console.log(`Error: ${err.message}`);
+  });
+}
