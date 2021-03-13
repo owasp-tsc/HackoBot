@@ -17,7 +17,6 @@ for (commandFile of commandFiles) {
 
 client.once("ready", () => {
   console.log("Connected as " + client.user.tag);
-  guild.channels.create("NEW_TEST_CHANNEL");
 });
 
 client.on("message", (message) => {
