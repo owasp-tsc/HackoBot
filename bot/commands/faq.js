@@ -24,14 +24,19 @@ module.exports = {
         const question = await Faq.findById(args[1]);
 
         if (!question) return message.channel.send(`NO question found`);
-        console.log(question);
+        // console.log(question);
+
         if (question.answer !== null)
           return message.channel.send(`question already answered`);
+
         if (!args[2]) return message.channel.send(`NO ans provided`);
+
         const answer = args.splice(2).reduce((acc, w) => acc + " " + w, "");
         question.answer = answer;
         await question.save();
+
         //! send ans to that team channel
+        //! allow reframing question
         return message.channel.send(`Ans added`);
 
         // return;
@@ -66,8 +71,7 @@ ${questions.reduce((acc, q, i) => acc + `${i + 1}: ${q.question}?\n`, "")}
 }
 async function sendQuestions(message) {
   const questions = await Faq.find({ answer: { $ne: null } }); //! fix index
-  // const questions = await Faq.find();
-  console.log(questions);
+  // console.log(questions);
   if (!questions.length)
     return message.channel.send(`NO questions are added right now --help`); //! change msg
   message.channel.send(formatQuestionsList(questions)); //! change msg
