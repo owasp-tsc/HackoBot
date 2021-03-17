@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const fs = require("fs");
 
-const { prefix } = require("./config.json");
+const { prefix } = require("./config");
 const client = new Discord.Client();
 const guild = new Discord.Guild(client);
 const AntiSpam = require("./antispam");
@@ -48,7 +48,7 @@ client.on("message", (message) => {
   const command = args.shift().toLowerCase();
   if (!client.commands.has(command)) return;
   try {
-    client.commands.get(command).execute(message, args);
+    client.commands.get(command).execute(message, args, client);
   } catch (error) {
     console.error(error);
     message.reply("there was an error trying to execute that command!");

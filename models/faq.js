@@ -1,16 +1,27 @@
 const mongoose = require("mongoose");
-
+//! add length and stuff
 const faqSchema = mongoose.Schema(
   {
     question: {
       type: String,
       required: true,
-      //! add length and stuff
     },
     answer: {
       type: String,
+      // required: true,
+      default: null,
+    },
+    teamName: {
+      type: String,
       required: true,
-      //! add length and stuff
+
+      // default: null,
+    },
+    authorUsername: {
+      type: String,
+      required: true,
+
+      // default: null,
     },
   },
   {
