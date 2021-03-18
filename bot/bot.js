@@ -45,10 +45,16 @@ client.on("message", (message) => {
 client.on("message", (message) => {
   if (!message.content.startsWith(prefix) || message.author.bot) return;
   const args = message.content.slice(prefix.length).trim().split(/ +/);
-  const command = args.shift().toLowerCase();
-  if (!client.commands.has(command)) return;
+  const commandName = args.shift().toLowerCase();
+    
+    // if (!client.commands.has(commandName)) return;
+    const command= client.commands.get(commandName) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+    if(!command) return;
+    if (command.args && !args.length) {
+        return message.channel.send(`You didn't provide any arguments, ${message.author}!`);
+    }
   try {
-    client.commands.get(command).execute(message, args, client);
+    command.execute(message, args,client);
   } catch (error) {
     console.error(error);
     message.reply("there was an error trying to execute that command!");
