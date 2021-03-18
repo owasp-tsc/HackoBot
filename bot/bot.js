@@ -5,7 +5,6 @@ const { prefix } = require("./config");
 const client = new Discord.Client();
 const guild = new Discord.Guild(client);
 const AntiSpam = require("./antispam");
-const roles = require("./rolesandchannels");
 
 client.commands = new Discord.Collection();
 const commandFiles = fs
