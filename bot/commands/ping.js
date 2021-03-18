@@ -2,6 +2,11 @@ module.exports = {
   name: "ping",
   description: "Ping!",
   execute(message, args) {
-    message.channel.send("Pong.");
+    const msg= {
+      color: 0x0099ff,
+      title : "Hello World",
+      description : "Pong ."
+    }
+    message.channel.send({embed : msg});
   },
 };

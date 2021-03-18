@@ -1,5 +1,5 @@
 const { prefix, faqConfig, participantTeamNamePrefix } = require("../config");
-
+const {embeds} = require('../embeds');
 const Faq = require("../../models/faq");
 
 function getFormattedAdminMsg({ teamName, authorUsername, _id, question }) {
@@ -20,10 +20,10 @@ module.exports = {
       } else if (args[0] === "addAns") {
         //! only for test
         //! make admin only
-        if (!args[1]) return message.channel.send(`NO question id`);
+        
+        if (!args[1]) return message.channel.send({embed : embeds(null,`NO question id`)});
         const question = await Faq.findById(args[1]);
-
-        if (!question) return message.channel.send(`NO question found`);
+        if (!question) return message.channel.send({embed : embeds(null,`NO question found`)});
         // console.log(question);
 
         if (question.answer !== null)

@@ -1,5 +1,5 @@
 const { prefix } = require("../config");
-
+const csv = require('csvtojson');
 module.exports = {
     name : 'register',
     discription : 'Lets you register for discord!',
