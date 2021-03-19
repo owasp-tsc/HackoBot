@@ -23,16 +23,12 @@ client.once("ready", () => {
 const antiSpam = new AntiSpam(antiSpamConfig);
 
 // client.on("message", (message) => {
-//   antiSpam.message(message);
-// });
-
-// client.on("message", (message) => {
 //   if (message.author.id === "729683555520610356") {
-//     message.channel.send("ARYAMAN SIR KHATRA"); //! change msg
+//     message.channel.send("ARYAMAN SIR KHATRA");
 //   } else if (message.author.id === "718111655753416765") {
-//     message.channel.send("SUSHI MA'AM ZINDABAAD"); //! change msg
+//     message.channel.send("SUSHI MA'AM ZINDABAAD");
 //   } else if (message.author.id === "693474602864738366") {
-//     message.channel.send("SUBHAM BHAI ZEHER "); //! change msg
+//     message.channel.send("SUBHAM BHAI ZEHER ");
 //   }
 // });
 client.on("message", (message) => {
