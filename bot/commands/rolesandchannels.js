@@ -1,122 +1,172 @@
-const { prefix } = require("../config");
-const csv = require('csvtojson');
+const {
+  prefix,
+  participantTeamNamePrefix,
+  registerChannel,
+} = require("../config");
+const csv = require("csvtojson");
+const Participant = require("../../models/participant");
+const Joi = require("joi");
+const allowedInChannel = require("../util/allowedInChannel");
+const createMiddlewarePipeline = require("../util/createMiddlewarePipeline");
 
+const validateEmail = (email) => {
+  return Joi.string().email().validate(email);
+};
+createMiddlewarePipeline;
 module.exports = {
-    name : 'register',
-    discription : 'Lets you register for discord!',
-    usage : `${prefix}register`,
-    aliases:["reg"],
-    execute(message,args) {
-      if(!args.length){
-        return message.reply("You can't keep the team name blank!");
-        
-    }
-    csv()
-    .fromFile("./hack.csv")
-    .then((data)=>{
-      const email = args[0];
-      const arr=data.filter(lol=>lol.Email===email && `${lol['First Name']} ${lol['Last Name']}`===message.member.nickname);
-      //not registerd
-      if(!arr.length){
-        return message.channel.send('You are not registered');
-      }
-      //role name
-      const team="Team - "+arr[0]['Team Name'];
-      // if role already exist
-      if(message.guild.roles.cache.find(r=>r.name===team)){
-        const role=message.guild.roles.cache.find(r=>r.name===team);
-        return message.member.roles.add(role).then(ff=>{
-          console.log('rols assigned');
-         }).catch(err=>{
-           console.log(err);
-         })
-      }
-      if(message.member.roles.cache.some(r=>r.name===team)){
-        return message.channel.send('Already Role assigned');
-      }
-      let ID;   
-      try{
-        message.guild.roles.create({
-          data:{
-            name : team,
-            color : '#14c7cc' ,
-            permissions: ['SEND_MESSAGES', 'VIEW_CHANNEL']
-          }
-        }).then((role)=>{
-          console.log(role)
-          message.member.roles.add(role).then(ff=>{
-           console.log('rols assigned');
-          }).catch(err=>{
+  name: "register",
+  discription: "Lets you register for discord!",
+  usage: `${prefix}register`,
+  aliases: ["reg"],
+
+  execute: (message, args) =>
+    createMiddlewarePipeline(allowedInChannel(registerChannel), execute)(
+      message,
+      args
+    ),
+};
+
+//! find person by id on admin
+
+async function execute(message, args) {
+  // if (!allowedInChannel(registerChannel.id, message))
+
+  if (!args.length) return message.reply("Email cannot be blank!");
+  // return message.reply("You can't keep the team name blank!");
+
+  const { value: email, error } = validateEmail(args[0]);
+  if (error) return message.channel.send("Invalid Eamil address");
+  const [participant] = await Participant.find({
+    email,
+  }).select(["email", "registeredOnDiscord", "teamName"]);
+  //! check stage ?
+  if (!participant)
+    return message.channel.send(
+      "You are not registered on devfolio{mightt be updated in some time }"
+    ); //!
+  if (participant.registeredOnDiscord)
+    return message.channel.send("Email already registered on discord");
+
+  //role name
+  const team = participantTeamNamePrefix + participant.teamName;
+  // if role already exist
+  if (
+    message.member.roles.cache.some((r) =>
+      r.name.startsWith(participantTeamNamePrefix)
+    )
+  )
+    return message.channel.send("Participant Already Registered on discord "); //! change
+
+  participant.discordId = message.author.id;
+  participant.discordTag = message.author.tag;
+  participant.registeredOnDiscord = true;
+  console.log(participant);
+  await participant.save();
+  if (message.guild.roles.cache.find((r) => r.name === team)) {
+    const role = message.guild.roles.cache.find((r) => r.name === team);
+    return message.member.roles
+      .add(role)
+      .then((ff) => {
+        console.log("rols assigned");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  let ID;
+  try {
+    message.guild.roles
+      .create({
+        data: {
+          name: team,
+          color: "#14c7cc",
+          permissions: ["SEND_MESSAGES", "VIEW_CHANNEL"],
+        },
+      })
+      .then((role) => {
+        // console.log(role);
+        message.member.roles
+          .add(role)
+          .then((ff) => {
+            console.log("rols assigned");
+          })
+          .catch((err) => {
             console.log(err);
-          })
+          });
 
-          message.guild.channels.create(team, {
+        message.guild.channels
+          .create(team, {
             name: team,
-            type: 'category',
+            type: "category",
             permissionOverwrites: [
               {
                 id: message.guild.id,
-                deny: ['VIEW_CHANNEL'],
+                deny: ["VIEW_CHANNEL"],
               },
               {
                 id: role.id,
-                allow: ['VIEW_CHANNEL'],
-              },
-            ],
-          }).then((channel) =>{
-              ID = channel.id;
-        })
-         
-          // creating text channel
-
-          message.guild.channels.create(team, {
-            name: team,
-            type: 'text', 
-            permissionOverwrites: [
-              {
-                id: message.guild.id,
-                deny: ['VIEW_CHANNEL'],
-              },
-              {
-                id: role.id,
-                allow: ['VIEW_CHANNEL'],
-              },
-            ],
-          }).then((channel) => {
-              channel.setParent(ID);
-          })
-      
-          // creating voice channel
-          message.guild.channels.create(team, {
-            name: team,
-            type: 'voice', 
-            permissionOverwrites: [
-              {
-                id: message.guild.id,
-                deny: ['VIEW_CHANNEL'],
-              },
-              {
-                id: role.id,
-                allow: ['VIEW_CHANNEL'],
+                allow: ["VIEW_CHANNEL"],
               },
             ],
           })
           .then((channel) => {
-              channel.setParent(ID);
-          })
-          message.channel.bulkDelete(1,true).catch(err=>{
-            console.log('Err',err.message);
-            message.reply(`There Was An Error Deleing zthe Meassages Reason : ${err.message}`)
-        })
+            ID = channel.id;
+          });
 
-        })
-       } catch(error)
-        {
-            console.error(error);
-            message.reply("Error: Invalid command or Team can't be created!");
-        };
-    }).catch(err=>{
-      console.log(err);
-    })
-}
+        // creating text channel
+
+        message.guild.channels
+          .create(team, {
+            name: team,
+            type: "text",
+            permissionOverwrites: [
+              {
+                id: message.guild.id,
+                deny: ["VIEW_CHANNEL"],
+              },
+              {
+                id: role.id,
+                allow: ["VIEW_CHANNEL"],
+              },
+            ],
+          })
+          .then((channel) => {
+            channel.setParent(ID);
+          });
+
+        // creating voice channel
+        message.guild.channels
+          .create(team, {
+            name: team,
+            type: "voice",
+            permissionOverwrites: [
+              {
+                id: message.guild.id,
+                deny: ["VIEW_CHANNEL"],
+              },
+              {
+                id: role.id,
+                allow: ["VIEW_CHANNEL"],
+              },
+            ],
+          })
+          .then((channel) => {
+            channel.setParent(ID);
+          });
+        message.channel.bulkDelete(1, true).catch((err) => {
+          console.log("Err", err.message);
+          message.reply(
+            `There Was An Error Deleing zthe Meassages Reason : ${err.message}`
+          );
+        });
+      });
+  } catch (error) {
+    console.error(error);
+    message.reply("Error: Invalid command or Team can't be created!");
+  }
+  // })
+  // .catch((err) => {
+  //   console.log(err);
+  // });
 }

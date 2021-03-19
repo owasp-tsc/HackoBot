@@ -1,5 +1,5 @@
 const { prefix, faqConfig, participantTeamNamePrefix } = require("../config");
-const {embeds} = require('../embeds');
+const { embeds } = require("../util/embeds");
 const Faq = require("../../models/faq");
 
 function getFormattedAdminMsg({ teamName, authorUsername, _id, question }) {
@@ -20,16 +20,27 @@ module.exports = {
       } else if (args[0] === "addAns") {
         //! only for test
         //! make admin only
-        
-        if (!args[1]) return message.channel.send({embed : embeds(null,`NO question id`)});
+
+        if (!args[1])
+          return message.channel.send({
+            embed: embeds(null, `NO question id`),
+          });
         const question = await Faq.findById(args[1]);
-        if (!question) return message.channel.send({embed : embeds(null,`NO question found`)});
+        if (!question)
+          return message.channel.send({
+            embed: embeds(null, `NO question found`),
+          });
         // console.log(question);
 
         if (question.answer !== null)
-          return message.channel.send({embed : embeds(null,`Question already answered`)});
+          return message.channel.send({
+            embed: embeds(null, `Question already answered`),
+          });
 
-        if (!args[2]) return message.channel.send({embed : embeds(null,`NO answer provided`)});
+        if (!args[2])
+          return message.channel.send({
+            embed: embeds(null, `NO answer provided`),
+          });
 
         const answer = args.splice(2).reduce((acc, w) => acc + " " + w, "");
         question.answer = answer;
@@ -37,7 +48,7 @@ module.exports = {
 
         //! send ans to that team channel
         //! allow reframing question
-        return message.channel.send({embed : embeds(null,`Ans added`)});
+        return message.channel.send({ embed: embeds(null, `Ans added`) });
 
         // return;
       } else if (isNaN(args[0])) {
@@ -73,14 +84,18 @@ async function sendQuestions(message) {
   const questions = await Faq.find({ answer: { $ne: null } }); //! fix index
   // console.log(questions);
   if (!questions.length)
-    return message.channel.send({embed : embeds(null,`NO questions are added right now --help`)}); //! change msg
+    return message.channel.send({
+      embed: embeds(null, `NO questions are added right now --help`),
+    }); //! change msg
   message.channel.send(formatQuestionsList(questions)); //! change msg
 }
 
 async function sendAnswer(message, index) {
   const questions = await Faq.find({ answer: { $ne: null } });
   if (questions.length < index) return message.channel.send("Invalid index"); //! change msg
-  return message.channel.send({embed : embeds(null,`${questions[index - 1].answer}`)}); //! change msg
+  return message.channel.send({
+    embed: embeds(null, `${questions[index - 1].answer}`),
+  }); //! change msg
 }
 
 async function newQuestion(message, question, client) {
@@ -88,7 +103,7 @@ async function newQuestion(message, question, client) {
     role.name.includes(participantTeamNamePrefix)
   );
   if (!teamRole) {
-    return message.channel.send({embed : embeds(null,`NO TEAM ROLE FOUND`)}); //! change msg
+    return message.channel.send({ embed: embeds(null, `NO TEAM ROLE FOUND`) }); //! change msg
   }
   const { name: teamName } = teamRole;
   const newQuestion = new Faq({
@@ -106,12 +121,15 @@ async function newQuestion(message, question, client) {
   try {
     await newQuestion.save();
     adminChannel.send(getFormattedAdminMsg(newQuestion));
-    message.channel.send({embed : embeds(null,`Question has been forwarded to us!!`)}).then(data=>{
-      return data.react("👍");
-  }).catch(err=>{
-      console.log('Err',err.message);
-      message.reply(`Reason : ${err.message}`)
-  }); //! change msg
+    message.channel
+      .send({ embed: embeds(null, `Question has been forwarded to us!!`) })
+      .then((data) => {
+        return data.react("👍");
+      })
+      .catch((err) => {
+        console.log("Err", err.message);
+        message.reply(`Reason : ${err.message}`);
+      }); //! change msg
   } catch (err) {
     console.log("ERROR!! failed to add a question", err);
     message.channel.send(
