@@ -1,71 +1,19 @@
-const { prefix, faqConfig, participantTeamNamePrefix } = require("../config");
-const { embeds } = require("../util/embeds");
+const {
+  prefix,
+  adminChannel,
+  participantTeamNamePrefix,
+} = require("../config");
+
 const Faq = require("../../models/faq");
 
-function getFormattedAdminMsg({ teamName, authorUsername, _id, question }) {
-  return `New question from:
-${teamName} : ${authorUsername}
-Question id: ${_id}
-Question:
-${question}?`;
-}
+const { validateMongooseId } = require("../validators");
 
-module.exports = {
-  name: "question",
-  description: "Faq!",
-  async execute(message, args, client) {
-    try {
-      if (!args.length) {
-        return sendQuestions(message);
-      } else if (args[0] === "addAns") {
-        //! only for test
-        //! make admin only
+const {
+  createMiddlewarePipeline,
+  allowedInChannel,
+  embeds,
+} = require("../util");
 
-        if (!args[1])
-          return message.channel.send({
-            embed: embeds(null, `NO question id`),
-          });
-        const question = await Faq.findById(args[1]);
-        if (!question)
-          return message.channel.send({
-            embed: embeds(null, `NO question found`),
-          });
-        // console.log(question);
-
-        if (question.answer !== null)
-          return message.channel.send({
-            embed: embeds(null, `Question already answered`),
-          });
-
-        if (!args[2])
-          return message.channel.send({
-            embed: embeds(null, `NO answer provided`),
-          });
-
-        const answer = args.splice(2).reduce((acc, w) => acc + " " + w, "");
-        question.answer = answer;
-        await question.save();
-
-        //! send ans to that team channel
-        //! allow reframing question
-        return message.channel.send({ embed: embeds(null, `Ans added`) });
-
-        // return;
-      } else if (isNaN(args[0])) {
-        const question = args.reduce((acc, w) => acc + " " + w, "");
-        return newQuestion(message, question, client);
-      } else {
-        return sendAnswer(message, args[0]);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  },
-};
-
-//! admin:
-// get all pending questions
-// answer a question
 function formatQuestionsList(questions) {
   return `
   Questions list =>
@@ -80,7 +28,128 @@ function formatQuestionsList(questions) {
 ${questions.reduce((acc, q, i) => acc + `${i + 1}: ${q.question}?\n`, "")}
   `; //! edit and change
 }
-async function sendQuestions(message) {
+
+function getFormattedAdminMsg({ teamName, authorUsername, _id, question }) {
+  return `New question from:
+${teamName} : ${authorUsername}
+Question id: ${_id}
+Question:
+${question}?`;
+}
+
+async function adminCommand(message, args) {
+  let action = () => {};
+  // console.log(args);
+  switch (args[1]) {
+    case "ansQ":
+    case "answerQuestion": {
+      action = addAnswer;
+      break;
+    }
+
+    case "modQ":
+    case "modifyQuestion": {
+      action = modifyQuestion;
+      break;
+    }
+
+    case "rmQ":
+    case "removeQuestion": {
+      action = removeQuestion;
+      break;
+    }
+
+    case "getUQ":
+    case "getUnansweredQuestions": {
+      action = sendUnansweredQuestions;
+      break;
+    }
+  }
+  args.splice(1, 1);
+  action(message, args);
+}
+async function removeQuestion(message, args) {
+  if (!args[1])
+    return message.channel.send({
+      embed: embeds(null, `NO question id`),
+    });
+  const { value: questionId, error } = validateMongooseId(args[1]);
+  if (error) return message.channel.send("Invalid mongoose id");
+
+  const question = await Faq.findByIdAndDelete(questionId);
+  if (!question)
+    return message.channel.send({
+      embed: embeds(null, `NO question found`),
+    });
+  return message.channel.send({
+    embed: embeds(null, `Question : ${question._id} was deleted `),
+  });
+}
+async function sendUnansweredQuestions(message, args) {
+  // console.log(args);
+  let limit = NaN;
+  if (!isNaN(args[1])) limit = parseInt(args[1]);
+  const questions = await Faq.find({ answer: { $eq: null } }).limit(limit);
+  if (!questions.length)
+    return message.channel.send({
+      embed: embeds(null, `No more questions right now `),
+    }); //! change msg
+  // message.channel.send(
+  console.log(questions);
+  message.channel.send({
+    embed: embeds(
+      null,
+      `Questions list =>\n${questions.reduce(
+        (acc, q, i) => acc + `${i + 1}: ${q.question}?\nQuestionID: ${q._id}\n`,
+        ""
+      )}`
+    ),
+  });
+  // );
+}
+async function modifyQuestion(message, args) {
+  //!
+}
+
+async function addAnswer(message, args) {
+  if (!args[1])
+    return message.channel.send({
+      embed: embeds(null, `NO question id`),
+    });
+  const { value: questionId, error } = validateMongooseId(args[1]);
+  if (error) return message.channel.send("Invalid mongoose id");
+
+  const question = await Faq.findById(questionId);
+  if (!question)
+    return message.channel.send({
+      embed: embeds(null, `NO question found`),
+    });
+  if (question.answer !== null)
+    return message.channel.send({
+      embed: embeds(null, `Question already answered`),
+    });
+
+  if (!args[2])
+    return message.channel.send({
+      embed: embeds(null, `NO answer provided`),
+    });
+
+  const answer = args.splice(2).join(" ");
+  question.answer = answer;
+  await question.save();
+
+  const teamChannel = message.guild.channels.cache.find(
+    (ch) => ch.id === question.teamChannelId
+  );
+  teamChannel.send({
+    embed: embeds(
+      null,
+      `Here is the answer to your question:\n${question.question}\n${question.answer}` //! change
+    ),
+  });
+  return message.channel.send({ embed: embeds(null, `Answer added`) });
+}
+async function sendAnsweredQuestions(message) {
   const questions = await Faq.find({ answer: { $ne: null } }); //! fix index
   // console.log(questions);
   if (!questions.length)
@@ -98,7 +167,14 @@ async function sendAnswer(message, index) {
   }); //! change msg
 }
 
-async function newQuestion(message, question, client) {
+async function newQuestion(message, question) {
+  if (
+    !message.channel.name.startsWith(participantTeamNamePrefix.toLowerCase())
+  ) {
+    return message.channel.send({
+      embed: embeds(null, `You can only ask question in your private channels`),
+    }); //! change msg
+  }
   const teamRole = message.member.roles.cache.find((role) =>
     role.name.includes(participantTeamNamePrefix)
   );
@@ -106,21 +182,24 @@ async function newQuestion(message, question, client) {
     return message.channel.send({ embed: embeds(null, `NO TEAM ROLE FOUND`) }); //! change msg
   }
   const { name: teamName } = teamRole;
+  // console.log(message.channel.id);
+  // teamChannelId =
   const newQuestion = new Faq({
     //! validate
     teamName,
+    teamChannelId: message.channel.id,
     authorUsername: message.author.username,
     question,
   });
-  let adminChannel = client.channels.cache.get(faqConfig.adminChannel.id);
-  if (!adminChannel) {
-    adminChannel = client.channels.cache.find(
-      (channel) => channel.name === faqConfig.adminChannel.name
+  let ac = message.client.channels.cache.get(adminChannel.id);
+  if (!ac) {
+    ac = message.client.channels.cache.find(
+      (channel) => channel.name === adminChannel.name
     );
   }
   try {
     await newQuestion.save();
-    adminChannel.send(getFormattedAdminMsg(newQuestion));
+    ac.send(getFormattedAdminMsg(newQuestion));
     message.channel
       .send({ embed: embeds(null, `Question has been forwarded to us!!`) })
       .then((data) => {
@@ -135,8 +214,31 @@ async function newQuestion(message, question, client) {
     message.channel.send(
       `Something went wrong\nPlease try again after a few minutes`
     );
-    adminChannel.send(
-      `ERROR!! failed to add a question ${JSON.stringify(err)}`
-    );
+    ac.send(`ERROR!! failed to add a question ${JSON.stringify(err)}`);
   }
 }
+
+module.exports = {
+  name: "question",
+  description: "Faq!",
+  aliases: ["ques"],
+  async execute(message, args) {
+    try {
+      if (!args.length) {
+        return sendAnsweredQuestions(message);
+      } else if (args[0] === "admin") {
+        return createMiddlewarePipeline(
+          allowedInChannel(adminChannel),
+          adminCommand
+        )(message, args);
+      } else if (isNaN(args[0])) {
+        const question = args.join(" ");
+        return newQuestion(message, question);
+      } else {
+        return sendAnswer(message, args[0]);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  },
+};

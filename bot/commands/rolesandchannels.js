@@ -1,18 +1,13 @@
+const Participant = require("../../models/participant");
 const {
   prefix,
   participantTeamNamePrefix,
   registerChannel,
 } = require("../config");
-const csv = require("csvtojson");
-const Participant = require("../../models/participant");
-const Joi = require("joi");
-const allowedInChannel = require("../util/allowedInChannel");
-const createMiddlewarePipeline = require("../util/createMiddlewarePipeline");
 
-const validateEmail = (email) => {
-  return Joi.string().email().validate(email);
-};
-createMiddlewarePipeline;
+const { allowedInChannel, createMiddlewarePipeline } = require("../util");
+const { validateEmail } = require("../validators");
+
 module.exports = {
   name: "register",
   discription: "Lets you register for discord!",
@@ -29,21 +24,22 @@ module.exports = {
 //! find person by id on admin
 
 async function execute(message, args) {
-  // if (!allowedInChannel(registerChannel.id, message))
-
   if (!args.length) return message.reply("Email cannot be blank!");
   // return message.reply("You can't keep the team name blank!");
 
   const { value: email, error } = validateEmail(args[0]);
   if (error) return message.channel.send("Invalid Eamil address");
+
   const [participant] = await Participant.find({
     email,
   }).select(["email", "registeredOnDiscord", "teamName"]);
   //! check stage ?
+
   if (!participant)
     return message.channel.send(
       "You are not registered on devfolio{mightt be updated in some time }"
     ); //!
+
   if (participant.registeredOnDiscord)
     return message.channel.send("Email already registered on discord");
 
@@ -60,8 +56,8 @@ async function execute(message, args) {
   participant.discordId = message.author.id;
   participant.discordTag = message.author.tag;
   participant.registeredOnDiscord = true;
-  console.log(participant);
   await participant.save();
+
   if (message.guild.roles.cache.find((r) => r.name === team)) {
     const role = message.guild.roles.cache.find((r) => r.name === team);
     return message.member.roles
@@ -165,8 +161,4 @@ async function execute(message, args) {
     console.error(error);
     message.reply("Error: Invalid command or Team can't be created!");
   }
-  // })
-  // .catch((err) => {
-  //   console.log(err);
-  // });
 }
