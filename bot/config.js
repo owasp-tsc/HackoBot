@@ -29,7 +29,7 @@ module.exports = {
     maxDuplicatesBan: 8, // Amount of duplicate messages that trigger a warning.
     exemptPermissions: ["ADMINISTRATOR"], // Bypass users with any of these permissions.
     ignoreBots: true, // Ignore bot messages.
-    verbose: true, // Extended Logs from module.
+    verbose: false, // Extended Logs from module.
     ignoredMembers: [], // Array of User IDs that get ignored.
     removeMessages: true, // If the bot should remove all the spam messages when taking action on a user!
   },

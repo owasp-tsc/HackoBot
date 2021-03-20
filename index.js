@@ -35,13 +35,13 @@ const server = app.listen(port, console.log(`Server started on port ${port}`));
 require("./bot/bot.js");
 
 // * Production setup
-if (process.env.NODE_ENV === "production") {
-  // * Handle unhandled promise exceptions
-  process.on("uncaughtException", (err, promise) => {
-    console.log(`Error: ${err.message}`);
-  });
-  // * Handle unhandled promise rejections
-  process.on("unhandledRejection", (err, promise) => {
-    console.log(`Error: ${err.message}`);
-  });
-}
+// if (process.env.NODE_ENV === "production") {
+//   // * Handle unhandled promise exceptions
+//   process.on("uncaughtException", (err, promise) => {
+//     console.log(`Error: ${err.message}`);
+//   });
+//   // * Handle unhandled promise rejections
+//   process.on("unhandledRejection", (err, promise) => {
+//     console.log(`Error: ${err.message}`);
+//   });
+// }

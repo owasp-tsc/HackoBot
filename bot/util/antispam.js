@@ -36,7 +36,7 @@ class AntiSpamClient extends EventEmitter {
       ignoreBots: options.ignoreBots || true,
 
       warnEnabled: options.warnEnabled || true,
-      kickEnabled: options.kickEnabled || true,
+      kickEnabled: options.kickEnabled || false,
       banEnabled: options.banEnabled || true,
 
       deleteMessagesAfterBanForPastDays:
@@ -117,9 +117,9 @@ class AntiSpamClient extends EventEmitter {
         reason: "Spamming!",
         days: this.options.deleteMessagesAfterBanForPastDays,
       });
-      if (this.options.errorMessages) {
+      if (this.options.banMessage) {
         message.channel
-          .send(this.format(this.options.banErrorMessage, message))
+          .send(this.format(this.options.banMessage, message))
           .catch((e) => {
             if (this.options.verbose) {
               console.error(
@@ -132,6 +132,7 @@ class AntiSpamClient extends EventEmitter {
       return true;
     }
   }
+
 
   async kickUser(message, member, spamMessages) {
     if (this.options.removeMessages && spamMessages) {
