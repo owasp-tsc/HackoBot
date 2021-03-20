@@ -17,6 +17,11 @@ const faqSchema = mongoose.Schema(
 
       // default: null,
     },
+    teamChannelId: {
+      type: String,
+      required: true,
+      // default: null,
+    },
     authorUsername: {
       type: String,
       required: true,

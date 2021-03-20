@@ -1,10 +1,7 @@
 const express = require("express");
 const app = express();
 require("dotenv").config();
-const cors = require("cors");
 const mongoose = require("mongoose");
-
-app.use(cors({ origin: `${process.env.CLIENT_URL}`, credentials: true }));
 
 // * DB
 mongoose.connect(
@@ -20,12 +17,6 @@ mongoose.connect(
     console.log("Connected to MongoDB");
   }
 );
-
-// * Route imports
-const faq = require("./routes/faq");
-
-// * Routes
-app.use("/api/faq", faq);
 
 // * Server
 const port = process.env.PORT || 5000;

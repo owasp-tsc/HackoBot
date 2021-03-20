@@ -1,17 +1,15 @@
 module.exports = {
   prefix: "!!",
-  faqConfig: {
-    adminChannel: {
-      name: "faq-admin",
-      id: "821671463572209684",
-    },
+
+  adminChannel: {
+    name: "admin",
+    id: "821671463572209684",
   },
-  // registerChan: {
+
   registerChannel: {
     name: "register",
     id: "822403858327273472",
   },
-  // },
 
   participantTeamNamePrefix: "Team-",
   participantsCSVPath: "./hack.csv",
