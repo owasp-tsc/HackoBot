@@ -32,7 +32,7 @@ const antiSpam = new AntiSpam(antiSpamConfig);
 //   }
 // });
 client.on("message", (message) => {
-  // antiSpam.message(message);
+  antiSpam.message(message);
   if (!message.content.startsWith(prefix) || message.author.bot) return;
   const args = message.content.slice(prefix.length).trim().split(/ +/);
   const commandName = args.shift().toLowerCase();
