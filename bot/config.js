@@ -11,6 +11,7 @@ module.exports = {
     id: "822403858327273472",
   },
 
+  participantsRoleId: "823678960323919983",
   participantTeamNamePrefix: "Team-",
   participantsCSVPath: "./hack.csv",
 
