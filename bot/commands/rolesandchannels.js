@@ -3,7 +3,14 @@ const {
   prefix,
   participantTeamNamePrefix,
   registerChannel,
+  
 } = require("../config");
+
+const {
+  embeds,
+  errorEmbed,
+  warnEmbed,
+} = require("../util");
 
 const { allowedInChannel, createMiddlewarePipeline } = require("../util");
 const { validateEmail } = require("../validators");
@@ -24,11 +31,14 @@ module.exports = {
 //! find person by id on admin
 
 async function execute(message, args) {
-  if (!args.length) return message.reply("Email cannot be blank!");
+  if (!args.length) return message.reply(
+    {
+      embed: warnEmbed(`WARNING`,`Email cannot be blank!`),
+    })
   // return message.reply("You can't keep the team name blank!");
 
   const { value: email, error } = validateEmail(args[0]);
-  if (error) return message.channel.send("Invalid Eamil address");
+  if (error) return message.channel.send({  embed: warnEmbed(`WARNING`,`Invalid Email Address`),})
 
   const [participant] = await Participant.find({
     email,
@@ -37,11 +47,17 @@ async function execute(message, args) {
 
   if (!participant)
     return message.channel.send(
-      "You are not registered on devfolio{mightt be updated in some time }"
+      {  
+        embed: errorEmbed(`NOT REGISTERED`,`You are not registered on devfolio! Make sure to do RSPV or if done, we might update it in some time`),
+    }
+      
     ); //!
 
   if (participant.registeredOnDiscord)
-    return message.channel.send("Email already registered on discord");
+    return message.channel.send(
+      {
+        embed: warnEmbed(`WARNING`,`Email already registered on discord`),
+      });
 
   //role name
   const team = participantTeamNamePrefix + participant.teamName;
@@ -51,7 +67,11 @@ async function execute(message, args) {
       r.name.startsWith(participantTeamNamePrefix)
     )
   )
-    return message.channel.send("Participant Already Registered on discord "); //! change
+    return message.channel.send(
+      {
+        embed: warnEmbed(`WARNING`,`Participant already registered on discord `),
+      }
+      ); //! change
 
   participant.discordId = message.author.id;
   participant.discordTag = message.author.tag;
@@ -64,7 +84,7 @@ async function execute(message, args) {
       .add(role)
       .then((ff) => {
         return message.member.guild.channels.cache.filter(ch=>ch.name===team.toLowerCase()).each(ch=>{
-          ch.send(`Congratulations ${message.author.username} !! \nYour Discord Registration for this ${email} has been completed`).then(gg=>{
+          ch.send(`Congratulations ${message.author} !! \nYour Discord Registration for this ${email} has been completed`).then(gg=>{
           gg.react('☺️');
         })
         })
@@ -163,12 +183,16 @@ async function execute(message, args) {
         message.channel.bulkDelete(1, true).catch((err) => {
           console.log("Err", err.message);
           message.reply(
-            `There Was An Error Deleing zthe Meassages Reason : ${err.message}`
+            {
+              embed: errorEmbed(`ERROR`, `There Was An Error Deleing zthe Meassages Reason : ${err.message}`)
+            }
           );
         });
       });
   } catch (error) {
     console.error(error);
-    message.reply("Error: Invalid command or Team can't be created!");
+    message.reply( {
+      embed: errorEmbed(`ERROR`, `Error: Invalid command or Team can't be created!`)
+    });
   }
 }
