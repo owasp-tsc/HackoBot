@@ -16,9 +16,11 @@ for (commandFile of commandFiles) {
   client.commands.set(command.name, command);
 }
 
-client.once("ready", () => {
-  console.log("Connected as " + client.user.tag);
+client.once('ready', () => {
+  client.user.setActivity('-help',{type:"LISTENING"});
+console.log('Ready!');
 });
+
 
 const antiSpam = new AntiSpam(antiSpamConfig);
 
