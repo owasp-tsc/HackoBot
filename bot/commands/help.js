@@ -1,6 +1,10 @@
 require('dotenv').config();
 const prefix=process.env.prefix;
 
+const {
+    embeds,
+  } = require("../util");
+
 module.exports={
     name : 'help',
     discription : 'Show all the available commanads with discription',
@@ -10,10 +14,12 @@ module.exports={
         const data=[];
         const commands=message.client.commands;
         if(!args.length){
+
             data.push('Here\'s a list of all my commands:');
             data.push(commands.map(command => `${command.name}`).join('\n'));
             data.push(`\nYou can send \`${prefix}help [command name]\` to get info on a specific command!`);
-            return message.author.send(data,{split : true}).then(()=>{
+
+            return message.author.send({embed: embeds(`Commands Guide Help`,data.join('\n'))}).then(()=>{
                 if(message.channel.type==="dm"){
                     message.reply('I\'ve sent you a DM with list of commands!');
                 }
@@ -25,7 +31,10 @@ module.exports={
         const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name));
 
         if (!command) {
-	        return message.reply('that\'s not a valid command!');
+	        return message.reply(
+                {
+                    embed: embeds(null,`That's not a valid command!`),
+                });
         }
 
         data.push(`**Name:** ${command.name}`);
