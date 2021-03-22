@@ -1,4 +1,8 @@
-const { participantTeamNamePrefix, adminChannel } = require("../config");
+const {
+  participantTeamNamePrefix,
+  adminChannel,
+  participantsRoleId,
+} = require("../config");
 
 const {
   embeds,
@@ -22,7 +26,12 @@ async function execute(message, args) {
   message.guild.channels.cache
     .filter((ch) => ch.name.startsWith(participantTeamNamePrefix.toLowerCase()))
     .forEach((ch) => {
-      ch.send({ embed: embeds("New Announcement", `${announcement}`) });
+      ch.send({
+        embed: embeds(
+          "New Announcement",
+          `<@&${participantsRoleId}> ${announcement}`
+        ),
+      });
     });
 
   message.channel.send({ embed: embeds(null, "Announcement Done") });

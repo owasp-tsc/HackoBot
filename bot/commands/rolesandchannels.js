@@ -57,18 +57,22 @@ async function execute(message, args) {
   participant.discordTag = message.author.tag;
   participant.registeredOnDiscord = true;
   await participant.save();
-  
+
   if (message.guild.roles.cache.find((r) => r.name === team)) {
     const role = message.guild.roles.cache.find((r) => r.name === team);
     return message.member.roles
       .add(role)
       .then((ff) => {
-        return message.member.guild.channels.cache.filter(ch=>ch.name===team.toLowerCase()).each(ch=>{
-          ch.send(`Congratulations ${message.author.username} !! \nYour Discord Registration for this ${email} has been completed`).then(gg=>{
-          gg.react('☺️');
-        })
-        })
-        
+        return message.member.guild.channels.cache
+          .filter((ch) => ch.name === team.toLowerCase())
+          .each((ch) => {
+            ch.send(
+              `Congratulations ${message.author} !! \nYour Discord Registration for this ${email} has been completed`
+            ).then((gg) => {
+              gg.react("☺️");
+            });
+          });
+
         console.log("rols assigned");
       })
       .catch((err) => {
@@ -135,9 +139,13 @@ async function execute(message, args) {
           })
           .then((channel) => {
             channel.setParent(ID);
-            channel.send(`Congratulations ${message.author} !! \nYour Discord Registration for this ${email} has been completed`).then(gg=>{
-              gg.react('☺️');
-            })
+            channel
+              .send(
+                `Congratulations ${message.author} !! \nYour Discord Registration for this ${email} has been completed`
+              )
+              .then((gg) => {
+                gg.react("☺️");
+              });
           });
 
         // creating voice channel
@@ -158,13 +166,12 @@ async function execute(message, args) {
           })
           .then((channel) => {
             channel.setParent(ID);
-            
           });
         message.channel.bulkDelete(1, true).catch((err) => {
           console.log("Err", err.message);
-          message.reply(
-            `There Was An Error Deleing zthe Meassages Reason : ${err.message}`
-          );
+          // message.reply(
+          //   `There Was An Error Deleing zthe Meassages Reason : ${err.message}`
+          // );
         });
       });
   } catch (error) {

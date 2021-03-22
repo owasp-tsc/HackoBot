@@ -39,7 +39,7 @@ ${question}?`;
 
 async function adminCommand(message, args) {
   let action = () => {};
-  // console.log(args);
+
   switch (args[1]) {
     case "ansQ":
     case "answerQuestion": {
@@ -144,19 +144,26 @@ async function addAnswer(message, args) {
   teamChannel.send({
     embed: embeds(
       null,
-      `Here is the answer to your question:\n${question.question}\n${question.answer}` //! change
+      `Here is the answer to your question:\n${question.question}?\n${question.answer}` //! change
     ),
   });
   return message.channel.send({ embed: embeds(null, `Answer added`) });
 }
 async function sendAnsweredQuestions(message) {
+  if (
+    !message.channel.name.startsWith(participantTeamNamePrefix.toLowerCase())
+  ) {
+    return message.channel.send({
+      embed: embeds(null, `You can only ask question in your private channels`),
+    }); //! change msg
+  }
+
   const questions = await Faq.find({ answer: { $ne: null } }); //! fix index
-  // console.log(questions);
   if (!questions.length)
     return message.channel.send({
       embed: embeds(null, `NO questions are added right now --help`),
     }); //! change msg
-  message.channel.send(formatQuestionsList(questions)); //! change msg
+  message.channel.send({ embed: embeds(null, formatQuestionsList(questions)) }); //! change msg
 }
 
 async function sendAnswer(message, index) {

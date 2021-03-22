@@ -1,5 +1,5 @@
 module.exports = createMiddlewarePipeline = (...fns) => (...args) => {
-  const getNext = (i, b) => {
+  const getNext = (i) => {
     if (i + 1 >= fns.length) return () => {};
     return () => fns[i + 1](...args, getNext(i + 1));
   };
