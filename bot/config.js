@@ -1,11 +1,10 @@
 module.exports = {
-  prefix: "!!",
+  prefix: "-",
 
   adminChannel: {
     name: "admin",
     id: "821671463572209684",
   },
-
   registerChannel: {
     name: "register",
     id: "822403858327273472",
