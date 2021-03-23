@@ -9,7 +9,7 @@ module.exports = {
   discription: "Show all the available commanads with discription",
   usage: `${prefix}help`,
   aliases: ["h"],
-  execute(message, args) {
+  execute(message, args) { 
     const data = [];
     let commands = message.client.commands;
     commands = commands.filter((command) => !command.ignoreInHelp);
