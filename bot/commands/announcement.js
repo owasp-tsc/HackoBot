@@ -14,6 +14,7 @@ module.exports = {
   name: "announcement",
   description: "announcement!",
   aliases: ["anc"],
+  ignoreInHelp: true,
   execute: (message, args) =>
     createMiddlewarePipeline(allowedInChannel(adminChannel), execute)(
       message,
@@ -21,8 +22,9 @@ module.exports = {
     ),
 };
 async function execute(message, args) {
-  if (!args[1]) return message.channel.send("Announcement cannot be empty");
-  const announcement = args.splice(0).join(" ");
+  console.log(args);
+  if (!args[0]) return message.channel.send("Announcement cannot be empty");
+  const announcement = args.join(" ");
   message.guild.channels.cache
     .filter((ch) => ch.name.startsWith(participantTeamNamePrefix.toLowerCase()))
     .forEach((ch) => {

@@ -33,9 +33,11 @@ const participantSchema = mongoose.Schema(
     email: {
       type: String,
       unique: true,
+      required: true,
     },
     teamName: {
       type: String,
+      required: true,
     },
     devfolio: {
       type: String,

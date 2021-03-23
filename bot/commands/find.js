@@ -8,8 +8,9 @@ const {
 
 module.exports = {
   name: "find",
-  description: "find user!",
-  aliases: ["anc"],
+  ignoreInHelp: true,
+  // description: "find user!",
+  // aliases: ["anc"],
   execute: (message, args) =>
     createMiddlewarePipeline(allowedInChannel(adminChannel), execute)(
       message,

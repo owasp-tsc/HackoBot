@@ -12,8 +12,8 @@ const { validateEmail } = require("../validators");
 
 module.exports = {
   name: "register",
-  discription: "Lets you register for discord!",
-  usage: `${prefix}register`,
+  description: `Lets you register for discord!`,
+  usage: `${prefix}register [your registered email]\nNote: This command only works in the ${registerChannel.name} channel.\n`,
   aliases: ["reg"],
 
   execute: (message, args) =>
@@ -22,8 +22,6 @@ module.exports = {
       args
     ),
 };
-
-//! find person by id on admin
 
 async function execute(message, args) {
   if (!args.length)

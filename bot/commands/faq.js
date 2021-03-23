@@ -2,6 +2,7 @@ const {
   prefix,
   adminChannel,
   participantTeamNamePrefix,
+  helpChannel,
 } = require("../config");
 
 const Faq = require("../../models/faq");
@@ -139,7 +140,7 @@ async function addAnswer(message, args) {
   await question.save();
 
   const teamChannel = message.guild.channels.cache.find(
-    (ch) => ch.id === question.teamChannelId
+    (ch) => ch.id === question.channelId
   );
   teamChannel.send({
     embed: embeds(
@@ -150,14 +151,6 @@ async function addAnswer(message, args) {
   return message.channel.send({ embed: embeds(null, `Answer added`) });
 }
 async function sendAnsweredQuestions(message) {
-  if (
-    !message.channel.name.startsWith(participantTeamNamePrefix.toLowerCase())
-  ) {
-    return message.channel.send({
-      embed: embeds(null, `You can only ask question in your private channels`),
-    }); //! change msg
-  }
-
   const questions = await Faq.find({ answer: { $ne: null } }); //! fix index
   if (!questions.length)
     return message.channel.send({
@@ -175,38 +168,26 @@ async function sendAnswer(message, index) {
 }
 
 async function newQuestion(message, question) {
-  if (
-    !message.channel.name.startsWith(participantTeamNamePrefix.toLowerCase())
-  ) {
-    return message.channel.send({
-      embed: embeds(null, `You can only ask question in your private channels`),
-    }); //! change msg
-  }
   const teamRole = message.member.roles.cache.find((role) =>
     role.name.includes(participantTeamNamePrefix)
   );
-  if (!teamRole) {
-    return message.channel.send({ embed: embeds(null, `NO TEAM ROLE FOUND`) }); //! change msg
-  }
-  const { name: teamName } = teamRole;
-  // console.log(message.channel.id);
-  // teamChannelId =
+  const teamName = teamRole?.name;
   const newQuestion = new Faq({
-    //! validate
     teamName,
-    teamChannelId: message.channel.id,
+    channelId: message.channel.id,
     authorUsername: message.author.username,
+    authorId: message.author.id,
     question,
   });
-  let ac = message.client.channels.cache.get(adminChannel.id);
-  if (!ac) {
-    ac = message.client.channels.cache.find(
+  let admin = message.client.channels.cache.get(adminChannel.id);
+  if (!admin) {
+    admin = message.client.channels.cache.find(
       (channel) => channel.name === adminChannel.name
     );
   }
   try {
     await newQuestion.save();
-    ac.send(getFormattedAdminMsg(newQuestion));
+    admin.send(getFormattedAdminMsg(newQuestion));
     message.channel
       .send({ embed: embeds(null, `Question has been forwarded to us!!`) })
       .then((data) => {
@@ -221,29 +202,39 @@ async function newQuestion(message, question) {
     message.channel.send(
       `Something went wrong\nPlease try again after a few minutes`
     );
-    ac.send(`ERROR!! failed to add a question ${JSON.stringify(err)}`);
+    admin.send(`ERROR!! failed to add a question ${JSON.stringify(err)}`);
   }
 }
-
+function participantCommand(message, args) {
+  if (!args.length) {
+    return sendAnsweredQuestions(message);
+  } else if (isNaN(args[0])) {
+    const question = args.join(" ");
+    return newQuestion(message, question);
+  } else {
+    return sendAnswer(message, args[0]);
+  }
+}
 module.exports = {
   name: "question",
   description: "Faq!",
   aliases: ["ques"],
+  usage: `${prefix}question: returns list of all questions
+  ${prefix}question [question number]: returns answer to a specific question
+  ${prefix}question [new question]: ask us a new question
+  `,
   async execute(message, args) {
     try {
-      if (!args.length) {
-        return sendAnsweredQuestions(message);
-      } else if (args[0] === "admin") {
+      if (args[0] === "admin")
         return createMiddlewarePipeline(
           allowedInChannel(adminChannel),
           adminCommand
         )(message, args);
-      } else if (isNaN(args[0])) {
-        const question = args.join(" ");
-        return newQuestion(message, question);
-      } else {
-        return sendAnswer(message, args[0]);
-      }
+
+      return createMiddlewarePipeline(
+        allowedInChannel(helpChannel, participantTeamNamePrefix),
+        participantCommand
+      )(message, args);
     } catch (err) {
       console.log(err);
     }

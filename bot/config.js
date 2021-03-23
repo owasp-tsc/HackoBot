@@ -1,5 +1,5 @@
 module.exports = {
-  prefix: "-",
+  prefix: "!!",
 
   adminChannel: {
     name: "admin",
@@ -10,8 +10,12 @@ module.exports = {
     name: "register",
     id: "822403858327273472",
   },
+  helpChannel: {
+    name: "help",
+    id: "823866191852077087",
+  },
 
-  participantsRoleId: "823678960323919983",
+  participantsRoleId: "823861158225903626",
   participantTeamNamePrefix: "Team-",
   participantsCSVPath: "./hack.csv",
 
