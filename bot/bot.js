@@ -67,7 +67,7 @@ client.on("message", (message) => {
       line: "YOSHNA IS ALWAYS WILD",
     },
   ];
-  const OP = OP_LOG.find((t) => t.id === message.author.id);
+  const OP = OP_LOG.find((op) => op.id === message.author.id);
   if (OP) {
     message.channel.send(OP.line);
   }
