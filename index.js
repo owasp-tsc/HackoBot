@@ -1,6 +1,11 @@
 const express = require("express");
 const app = express();
-require("dotenv").config();
+
+if (process.env.NODE_ENV !== "production") {
+  console.log("dev vars loaded");
+  require("dotenv").config({ path: "./.env.dev" });
+}
+
 const mongoose = require("mongoose");
 
 // * DB
@@ -43,6 +48,7 @@ require("./bot/bot.js");
 
 // * Production setup
 if (process.env.NODE_ENV === "production") {
+  console.log("production env");
   // * Handle unhandled promise exceptions
   process.on("uncaughtException", (err, promise) => {
     console.log(`Error: ${err.message}`);
