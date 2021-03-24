@@ -10,8 +10,8 @@ module.exports = {
     id: "824262095725658132",
   },
   helpChannel: {
-    name: "help-channel",
-    id: "816009828903682118",
+    name: "faq",
+    id: "821728004039507978",
   },
   participantsRoleId: "785088756070744065",
   teamsEvaluateRoleid: "822145050410352690",
