@@ -29,12 +29,12 @@ client.once("ready", () => {
 const antiSpam = new AntiSpam(antiSpamConfig);
 
 client.on("message", (message) => {
-  if (
-    // message.channel.id !== "816709034357817364" &&
-    message.channel.id !== "821813318775472179" &&
-    message.channel.id !== adminChannel.id
-  )
-    return;
+  // if (
+  //   // message.channel.id !== "816709034357817364" &&
+  //   message.channel.id !== "821813318775472179" &&
+  //   message.channel.id !== adminChannel.id
+  // )
+  //   return;
   if (message.author.id === "729683555520610356") {
     message.channel.send("ARYAMAN SIR KHATRA");
   } else if (message.author.id === "718111655753416765") {
