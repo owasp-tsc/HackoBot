@@ -20,10 +20,10 @@ function formatQuestionsList(questions) {
   Questions list =>
 
   Enter the command :
-    ${prefix}question {the question number } 
+    ${prefix}question [question number] 
   to get your answer
   If your answer is not in this you can ask your question with: 
-    ${prefix}question {your question }
+    ${prefix}question [your question]
   and we will get back to youu asap
   
 ${questions.reduce((acc, q, i) => acc + `${i + 1}: ${q.question}?\n`, "")}
