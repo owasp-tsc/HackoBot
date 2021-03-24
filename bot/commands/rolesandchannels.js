@@ -46,13 +46,16 @@ async function execute(message, args) {
     return message.channel.send({
       embed: errorEmbed(
         `NOT REGISTERED`,
-        `You are not registered on devfolio! Make sure to do RSPV or if done, we might update it in some time`
+        `${message.author} You are not registered on devfolio! Make sure to do RSPV or if done, we might update it in some time`
       ),
     }); //!
 
   if (participant.registeredOnDiscord)
     return message.channel.send({
-      embed: warnEmbed(`WARNING`, `Email already registered on discord`),
+      embed: warnEmbed(
+        `WARNING`,
+        ` ${message.author} Email already registered on discord`
+      ),
     });
 
   let team = await Team.findOne({ name: participant.teamName });
