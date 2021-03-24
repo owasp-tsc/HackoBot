@@ -37,20 +37,39 @@ client.on("message", (message) => {
     )
   )
     return;
-  if (message.author.id === "729683555520610356") {
-    message.channel.send("ARYAMAN SIR KHATRA");
-  } else if (message.author.id === "718111655753416765") {
-    message.channel.send("SUSHI MA'AM ZINDABAAD");
-  } else if (message.author.id === "693474602864738366") {
-    message.channel.send("SUBHAM BHAI ZEHER ");
-  } else if (message.author.id === "700442565278957639") {
-    message.channel.send("AKSHAT BHAIYA JSON AA GAYI");
-  } else if (message.author.id === "693157266416992277") {
-    message.channel.send("FABHIL OPP");
-  } else if (message.author.id === "694529909032222832") {
-    message.channel.send(
-      "HELOOOOOOOOOOOOOOOOOOOOOOOOO TANVEEEEEEEEEEEEEEEERRRRRRR"
-    );
+  const tagLines = [
+    {
+      id: "729683555520610356",
+      line: "ARYAMAN SIR KHATRA",
+    },
+    {
+      id: "718111655753416765",
+      line: "SUSHI MA'AM ZINDABAAD",
+    },
+    {
+      id: "693474602864738366",
+      line: "SUBHAM BHAI ZEHER ",
+    },
+    {
+      id: "700442565278957639",
+      line: "AKSHAT BHAIYA JSON AA GAYI ",
+    },
+    {
+      id: "693157266416992277",
+      line: "FABHIL OPP",
+    },
+    {
+      id: "694529909032222832",
+      line: "HELOOOOOOOOOOOOOOOOOOOOOOOOO TANVEEEEEEEEEEEEEEEERRRRRRR",
+    },
+    {
+      id: "756448363968331798",
+      line: "YOSHNA IS ALWAYS WILD",
+    },
+  ];
+  const member = tagLines.find((t) => t.id === message.author.id);
+  if (member) {
+    message.channel.send(member.line);
   }
 });
 client.on("message", (message) => {
