@@ -37,7 +37,7 @@ client.on("message", (message) => {
     )
   )
     return;
-  const tagLines = [
+  const OP_LOG = [
     {
       id: "729683555520610356",
       line: "ARYAMAN SIR KHATRA",
@@ -67,11 +67,12 @@ client.on("message", (message) => {
       line: "YOSHNA IS ALWAYS WILD",
     },
   ];
-  const member = tagLines.find((t) => t.id === message.author.id);
-  if (member) {
-    message.channel.send(member.line);
+  const OP = OP_LOG.find((t) => t.id === message.author.id);
+  if (OP) {
+    message.channel.send(OP.line);
   }
 });
+
 client.on("message", (message) => {
   antiSpam.message(message);
   if (!message.content.startsWith(prefix) || message.author.bot) return;
