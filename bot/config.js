@@ -2,16 +2,16 @@ module.exports = {
   prefix: "-",
 
   adminChannel: {
-    name: "admin",
-    id: "821671463572209684",
+    name: "bot-admin",
+    id: "824254161998446622",
   },
   registerChannel: {
     name: "register",
     id: "822403858327273472",
   },
   helpChannel: {
-    name: "help",
-    id: "823866191852077087",
+    name: "help-channel",
+    id: "816009828903682118",
   },
 
   participantsRoleId: "823861158225903626",
