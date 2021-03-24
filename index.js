@@ -1,10 +1,10 @@
 const express = require("express");
 const app = express();
 
-// if (process.env.NODE_ENV !== "production") {
-console.log("dev vars loaded");
-require("dotenv").config({ path: "./.env.dev" });
-// }
+if (process.env.NODE_ENV !== "production") {
+  console.log("dev vars loaded");
+  require("dotenv").config({ path: "./.env.dev" });
+}
 
 const mongoose = require("mongoose");
 

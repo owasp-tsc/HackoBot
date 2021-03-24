@@ -41,6 +41,8 @@ client.on("message", (message) => {
     message.channel.send("SUSHI MA'AM ZINDABAAD");
   } else if (message.author.id === "693474602864738366") {
     message.channel.send("SUBHAM BHAI ZEHER ");
+  } else if (message.author.id === "700442565278957639") {
+    message.channel.send("AKSHAT BHAIYA JSON AA GAYI");
   }
 });
 client.on("message", (message) => {
