@@ -3,6 +3,7 @@ const {
   prefix,
   participantTeamNamePrefix,
   registerChannel,
+  teamsEvaluateRoleid
 } = require("../config");
 
 const { embeds, errorEmbed, warnEmbed } = require("../util");
@@ -127,6 +128,10 @@ async function execute(message, args) {
                 id: role.id,
                 allow: ["VIEW_CHANNEL"],
               },
+              {
+                id: teamsEvaluateRoleid,
+                allow: ["VIEW_CHANNEL"],
+              },
             ],
           })
           .then((channel) => {
@@ -146,6 +151,10 @@ async function execute(message, args) {
               },
               {
                 id: role.id,
+                allow: ["VIEW_CHANNEL"],
+              },
+              {
+                id: teamsEvaluateRoleid,
                 allow: ["VIEW_CHANNEL"],
               },
             ],
@@ -173,6 +182,10 @@ async function execute(message, args) {
               },
               {
                 id: role.id,
+                allow: ["VIEW_CHANNEL"],
+              },
+              {
+                id: teamsEvaluateRoleid,
                 allow: ["VIEW_CHANNEL"],
               },
             ],
