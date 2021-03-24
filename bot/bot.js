@@ -47,6 +47,10 @@ client.on("message", (message) => {
     message.channel.send("AKSHAT BHAIYA JSON AA GAYI");
   } else if (message.author.id === "693157266416992277") {
     message.channel.send("FABHIL OPP");
+  } else if (message.author.id === "694529909032222832") {
+    message.channel.send(
+      "HELOOOOOOOOOOOOOOOOOOOOOOOOO TANVEEEEEEEEEEEEEEEERRRRRRR"
+    );
   }
 });
 client.on("message", (message) => {
