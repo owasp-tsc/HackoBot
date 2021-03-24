@@ -24,7 +24,7 @@ function formatQuestionsList(questions) {
   to get your answer
   If your answer is not in this you can ask your question with: 
     ${prefix}question [your question]
-  and we will get back to youu asap
+  and we will get back to you asap
   
 ${questions.reduce((acc, q, i) => acc + `${i + 1}: ${q.question}?\n`, "")}
   `; //! edit and change
