@@ -32,15 +32,19 @@ app.get("/", (req, res) => res.send("ROOT "));
 const { validateEmail } = require("./bot/validators");
 const Participant = require("./models/participant");
 app.get("/register/:email", async (req, res) => {
-  const { value: email, error } = validateEmail(req.params.email);
-  if (error) return res.send(error.details[0].message);
-  const newParticipant = new Participant({
-    firstName: email,
-    email,
-    teamName: email,
-  });
-  await newParticipant.save();
-  res.send(newParticipant);
+  try {
+    const { value: email, error } = validateEmail(req.params.email);
+    if (error) return res.send(error.details[0].message);
+    const newParticipant = new Participant({
+      firstName: email,
+      email,
+      teamName: email,
+    });
+    await newParticipant.save();
+    res.send(newParticipant);
+  } catch (err) {
+    res.send("change email");
+  }
 });
 
 // * Discord Bot
