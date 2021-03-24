@@ -1,4 +1,5 @@
 const Participant = require("../../models/participant");
+const Team = require("../../models/team");
 const {
   prefix,
   participantTeamNamePrefix,
@@ -41,22 +42,36 @@ async function execute(message, args) {
     email,
   }).select(["email", "registeredOnDiscord", "teamName"]);
   //! check stage ?
-
+  console.log(participant);
   if (!participant)
     return message.channel.send({
       embed: errorEmbed(
         `NOT REGISTERED`,
-        `You are not registered on devfolio! Make sure to do RSPV or if done, we might update it in some time`
+        `${message.author} You are not registered on devfolio! Make sure to do RSPV or if done, we might update it in some time`
       ),
     }); //!
 
   if (participant.registeredOnDiscord)
     return message.channel.send({
-      embed: warnEmbed(`WARNING`, `Email already registered on discord`),
+      embed: warnEmbed(
+        `WARNING`,
+        ` ${message.author} Email already registered on discord`
+      ),
     });
 
+  let team = await Team.findOne({ name: participant.teamName });
+  if (!team) {
+    let teamNumber = await Team.find().count();
+    // if (teamNumber === 0) teamNumber++;
+    team = new Team({
+      name: participant.teamName,
+      number: teamNumber + 1,
+    });
+  }
+
   //role name
-  const team = participantTeamNamePrefix + participant.teamName;
+  const teamName =
+    participantTeamNamePrefix + `${team.number}-` + participant.teamName;
   // if role already exist
   if (
     message.member.roles.cache.some((r) =>
@@ -70,15 +85,18 @@ async function execute(message, args) {
   participant.discordId = message.author.id;
   participant.discordTag = message.author.tag;
   participant.registeredOnDiscord = true;
+  await team.save();
+  participant.team = team._id;
+  participant.teamNumber = team.number;
   await participant.save();
 
-  if (message.guild.roles.cache.find((r) => r.name === team)) {
-    const role = message.guild.roles.cache.find((r) => r.name === team);
+  if (message.guild.roles.cache.find((r) => r.name === teamName)) {
+    const role = message.guild.roles.cache.find((r) => r.name === teamName);
     return message.member.roles
       .add(role)
       .then((ff) => {
         return message.member.guild.channels.cache
-          .filter((ch) => ch.name === team.toLowerCase())
+          .filter((ch) => ch.name === teamName.toLowerCase())
           .each((ch) => {
             ch.send(
               `Congratulations ${message.author} !! \nYour Discord Registration for this ${email} has been completed`
@@ -99,7 +117,7 @@ async function execute(message, args) {
     message.guild.roles
       .create({
         data: {
-          name: team,
+          name: teamName,
           color: "#14c7cc",
           permissions: ["SEND_MESSAGES", "VIEW_CHANNEL"],
         },
@@ -116,8 +134,8 @@ async function execute(message, args) {
           });
 
         message.guild.channels
-          .create(team, {
-            name: team,
+          .create(teamName, {
+            name: teamName,
             type: "category",
             permissionOverwrites: [
               {
@@ -141,8 +159,8 @@ async function execute(message, args) {
         // creating text channel
 
         message.guild.channels
-          .create(team, {
-            name: team,
+          .create(teamName, {
+            name: teamName,
             type: "text",
             permissionOverwrites: [
               {
@@ -172,8 +190,8 @@ async function execute(message, args) {
 
         // creating voice channel
         message.guild.channels
-          .create(team, {
-            name: team,
+          .create(teamName, {
+            name: teamName,
             type: "voice",
             permissionOverwrites: [
               {

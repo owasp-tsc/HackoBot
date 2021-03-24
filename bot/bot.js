@@ -1,7 +1,12 @@
 const Discord = require("discord.js");
 const fs = require("fs");
 
-const { prefix, participantsCSVPath, antiSpamConfig } = require("./config");
+const {
+  prefix,
+  participantsCSVPath,
+  antiSpamConfig,
+  adminChannel,
+} = require("./config");
 const client = new Discord.Client();
 const guild = new Discord.Guild(client);
 const AntiSpam = require("./util/antispam");
@@ -16,23 +21,30 @@ for (commandFile of commandFiles) {
   client.commands.set(command.name, command);
 }
 
-client.once('ready', () => {
-  client.user.setActivity('-help',{type:"LISTENING"});
-console.log('Ready!');
+client.once("ready", () => {
+  client.user.setActivity("-help", { type: "LISTENING" });
+  console.log("Ready!");
 });
-
 
 const antiSpam = new AntiSpam(antiSpamConfig);
 
-// client.on("message", (message) => {
-//   if (message.author.id === "729683555520610356") {
-//     message.channel.send("ARYAMAN SIR KHATRA");
-//   } else if (message.author.id === "718111655753416765") {
-//     message.channel.send("SUSHI MA'AM ZINDABAAD");
-//   } else if (message.author.id === "693474602864738366") {
-//     message.channel.send("SUBHAM BHAI ZEHER ");
-//   }
-// });
+client.on("message", (message) => {
+  // if (
+  //   // message.channel.id !== "816709034357817364" &&
+  //   message.channel.id !== "821813318775472179" &&
+  //   message.channel.id !== adminChannel.id
+  // )
+  //   return;
+  if (message.author.id === "729683555520610356") {
+    message.channel.send("ARYAMAN SIR KHATRA");
+  } else if (message.author.id === "718111655753416765") {
+    message.channel.send("SUSHI MA'AM ZINDABAAD");
+  } else if (message.author.id === "693474602864738366") {
+    message.channel.send("SUBHAM BHAI ZEHER ");
+  } else if (message.author.id === "700442565278957639") {
+    message.channel.send("AKSHAT BHAIYA JSON AA GAYI");
+  }
+});
 client.on("message", (message) => {
   antiSpam.message(message);
   if (!message.content.startsWith(prefix) || message.author.bot) return;

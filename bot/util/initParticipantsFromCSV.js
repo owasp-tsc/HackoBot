@@ -7,6 +7,7 @@ module.exports = async function (csvPath) {
     .then((data) => {
       data.forEach(async (participantJSON) => {
         try {
+          // console.log(participantJSON);
           const participant = Object.keys(participantJSON).reduce(
             (obj, key) => {
               let temp = key.split(" ");
@@ -17,6 +18,7 @@ module.exports = async function (csvPath) {
             },
             {}
           );
+          // console.log(participant);
           const newParticipant = new Participant({
             ...participant,
           });

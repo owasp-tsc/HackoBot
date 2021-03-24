@@ -2,6 +2,23 @@ const mongoose = require("mongoose");
 //! add length and stuff
 const participantSchema = mongoose.Schema(
   {
+    team: {
+      type: mongoose.Schema.Types.ObjectID,
+      ref: "Team",
+      default: null,
+
+      // required: true,
+    },
+    teamName: {
+      type: String,
+      required: true,
+      // unique: true,
+    },
+    teamNumber: {
+      type: Number,
+      // required: true,
+      default: null,
+    },
     discordId: {
       type: String,
       default: null,
@@ -35,10 +52,7 @@ const participantSchema = mongoose.Schema(
       unique: true,
       required: true,
     },
-    teamName: {
-      type: String,
-      required: true,
-    },
+
     devfolio: {
       type: String,
     },
