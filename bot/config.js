@@ -3,18 +3,18 @@ module.exports = {
 
   adminChannel: {
     name: "bot-admin",
-    id: "821671463572209684",
+    id: "824254161998446622",
   },
   registerChannel: {
     name: "register",
-    id: "822403858327273472",
+    id: "824262095725658132",
   },
   helpChannel: {
     name: "help-channel",
-    id: "823866191852077087",
+    id: "816009828903682118",
   },
-  participantsRoleId: "824279089845370922",
-  teamsEvaluateRoleid : "824294052454203472",
+  participantsRoleId: "785088756070744065",
+  teamsEvaluateRoleid: "822145050410352690",
 
   participantTeamNamePrefix: "Team-",
   participantsCSVPath: "./hack.csv",
@@ -37,15 +37,3 @@ module.exports = {
     removeMessages: true, // If the bot should remove all the spam messages when taking action on a user!
   },
 };
-// adminChannel: {
-//   name: "bot-admin",
-//   id: "824254161998446622",
-// },
-// registerChannel: {
-//   name: "register",
-//   id: "824262095725658132",
-// },
-// helpChannel: {
-//   name: "help-channel",
-//   id: "816009828903682118",
-// },
