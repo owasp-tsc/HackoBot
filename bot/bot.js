@@ -73,6 +73,10 @@ client.on("message", (message) => {
       id: "693477263458566194",
       line: "CALL HER PALAK",
     },
+    {
+      id: "647148724958658579",
+      line: "ROHAN BHAIYA NE TOH FUNNY KARDIYA ",
+    },
   ];
 
   const OP = OP_LOG.find((op) => op.id === message.author.id);
