@@ -6,7 +6,7 @@ module.exports = {
     id: "824254161998446622",
   },
   registerChannel: {
-    name: "register",
+    name: "team-registration",
     id: "824262095725658132",
   },
   helpChannel: {
@@ -21,7 +21,7 @@ module.exports = {
   teamsEvaluateRoleid: "822145050410352690",
 
   participantTeamNamePrefix: "Team-",
-  participantsCSVPath: "./hack.csv",
+  participantsCSVPath: "./hack-p.csv",
 
   antiSpamConfig: {
     warnThreshold: 3, // Amount of messages sent in a row that will cause a warning.
