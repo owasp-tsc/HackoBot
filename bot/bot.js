@@ -79,6 +79,10 @@ client.on("message", (message) => {
       line: "CALL HER PALAK",
     },
     {
+      id: "710061073889493104",
+      line: "Kritik Bhai Party Dede ",
+    },
+    {
       id: "647148724958658579",
       line: "ROHAN BHAIYA NE TOH FUNNY KARDIYA ",
     },
