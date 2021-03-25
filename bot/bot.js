@@ -27,11 +27,8 @@ client.once("ready", () => {
 
 const antiSpam = new AntiSpam(antiSpamConfig);
 const count = {};
-// app.set("count", count);
 
 client.on("message", (message) => {
-  // return;
-  // const count = app.get("count");
   if (
     !(
       message.channel.id === "789744750957428778" ||
