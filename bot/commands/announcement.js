@@ -31,6 +31,7 @@ async function execute(message, args) {
 
   const teams = ts.reduce((acc, t) => {
     acc[t.textChannel] = t;
+    return acc;
   }, {});
   console.log(teams);
 
