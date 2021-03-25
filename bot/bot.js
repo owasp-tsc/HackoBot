@@ -67,6 +67,14 @@ client.on("message", (message) => {
       line: "YOSHNA IS ALWAYS WILD",
     },
     {
+      id: "241079970368192512",
+      line: "Rish Sir OP",
+    },
+    {
+      id: "714412271023161405",
+      line: "Akshay bhai Isshmaart",
+    },
+    {
       id: "693477263458566194",
       line: "CALL HER PALAK",
     },
