@@ -89,7 +89,7 @@ async function execute(message, args) {
   participant.team = team._id;
   participant.teamNumber = team.number;
   await participant.save();
-
+  let teamTextChannel;
   if (message.guild.roles.cache.find((r) => r.name === teamName)) {
     const role = message.guild.roles.cache.find((r) => r.name === teamName);
     return message.member.roles
@@ -177,11 +177,9 @@ async function execute(message, args) {
               },
             ],
           })
-          .then(async (channel) => {
+          .then((channel) => {
             channel.setParent(ID);
-            team.textChannel = channel.id;
-            await team.save();
-
+            teamTextChannel = channel.id;
             channel
               .send(
                 `Congratulations ${message.author} !! \nYour Discord Registration for this ${email} has been completed`
@@ -224,6 +222,9 @@ async function execute(message, args) {
           // });
         });
       });
+    // team.textChannel = channel.id;
+    team.textChannel = channel.id;
+    await team.save();
   } catch (error) {
     console.error(error);
     message.reply({
