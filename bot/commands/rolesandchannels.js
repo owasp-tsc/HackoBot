@@ -238,7 +238,7 @@ async function execute(message, args) {
     console.error(error);
     message.reply({
       embed: errorEmbed(
-        `ERROR`,
+        `ERROR `,
         `Error: Invalid command or Team can't be created!`
       ),
     });
