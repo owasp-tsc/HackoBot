@@ -33,6 +33,7 @@ async function execute(message, args) {
   // return message.reply("You can't keep the team name blank!");
 
   const { value: email, error } = validateEmail(args[0]);
+
   if (error)
     return message.channel.send({
       embed: warnEmbed(`WARNING`, `Invalid Email Address`),
@@ -183,6 +184,7 @@ async function execute(message, args) {
             console.log("ID", ID);
 
             channel.setParent(ID);
+
             teamTextChannel = channel.id;
 
             channel
