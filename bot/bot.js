@@ -31,9 +31,12 @@ const count = {};
 client.on("message", (message) => {
   if (
     !(
-      message.channel.id === "789744750957428778" ||
-      message.channel.id === "821813318775472179" ||
-      message.channel.id === adminChannel.id
+      (
+        message.channel.id === "789744750957428778" ||
+        message.channel.id === "821813318775472179"
+      )
+      // ||
+      // message.channel.id === adminChannel.id
     )
   )
     return;
