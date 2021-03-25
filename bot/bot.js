@@ -88,7 +88,7 @@ client.on("message", (message) => {
   if (!OP) return;
   if (!count[OP.id]) count[OP.id] = 0;
   count[OP.id]++;
-  if (count[OP.id] >= 1) {
+  if (count[OP.id] >= 3) {
     message.channel.send(OP.line);
     count[OP.id] = 0;
   }

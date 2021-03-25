@@ -1,6 +1,6 @@
 const {
   participantTeamNamePrefix,
-  adminChannel,
+  announcementChannel,
   participantsRoleId,
 } = require("../config");
 
@@ -16,7 +16,7 @@ module.exports = {
   aliases: ["anc"],
   ignoreInHelp: true,
   execute: (message, args) =>
-    createMiddlewarePipeline(allowedInChannel(adminChannel), execute)(
+    createMiddlewarePipeline(allowedInChannel(announcementChannel), execute)(
       message,
       args
     ),
