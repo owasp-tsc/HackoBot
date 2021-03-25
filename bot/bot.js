@@ -115,11 +115,19 @@ client.on("message", (message) => {
     },
     {
       id: "551046575074574336",
-      line: "GAYAB LAVISH",
+      line: "Lavish- Chill karo",
     },
     {
       id: "726146289594531871",
       line: "Aastik loneliness OP",
+    },
+    {
+      id: "762026111134728194",
+      line: "Arshia Main cute hoon mujhe maaf kardo",
+    },
+    {
+      id: "748962228316799042",
+      line: "Nipun ki kardo udte teer wala caption OP",
     },
   ];
 
