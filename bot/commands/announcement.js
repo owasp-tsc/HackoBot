@@ -4,6 +4,8 @@ const {
   participantsRoleId,
 } = require("../config");
 
+const Team = require("../../models/team");
+
 const {
   embeds,
   createMiddlewarePipeline,
@@ -25,8 +27,12 @@ async function execute(message, args) {
   console.log(args);
   if (!args[0]) return message.channel.send("Announcement cannot be empty");
   const announcement = args.join(" ");
+  const teams = await Team.find().reduce((acc, t) => {
+    acc[t.textChannel] = t;
+  }, {});
+
   message.guild.channels.cache
-    .filter((ch) => ch.name.startsWith(participantTeamNamePrefix.toLowerCase()))
+    .filter((ch) => teams[ch.id] !== undefined)
     .forEach((ch) => {
       ch.send({
         embed: embeds(
