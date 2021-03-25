@@ -77,14 +77,12 @@ client.on("message", (message) => {
 
   const OP = OP_LOG.find((op) => op.id === message.author.id);
   if (!OP) return;
-
-  if (OP.id in count) {
-    count[OP.id]++;
-    if (count[OP.id] >= 3) {
-      message.channel.send(OP.line);
-      count[OP.id] = 0;
-    }
-  } else count[OP.id] = 1;
+  if (!count[OP.id]) count[OP.id] = 0;
+  count[OP.id]++;
+  if (count[OP.id] >= 1) {
+    message.channel.send(OP.line);
+    count[OP.id] = 0;
+  }
 });
 
 client.on("message", (message) => {
