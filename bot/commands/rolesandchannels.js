@@ -43,7 +43,7 @@ async function execute(message, args) {
     email,
   }).select(["email", "registeredOnDiscord", "teamName"]);
   //! check stage ?
-  console.log(participant);
+  // console.log(participant);
   if (!participant)
     return message.channel.send({
       embed: errorEmbed(
@@ -113,7 +113,7 @@ async function execute(message, args) {
         console.log("rols assigned");
       })
       .catch((err) => {
-        console.log(err);
+        console.log("err", err);
       });
   }
 
@@ -135,7 +135,7 @@ async function execute(message, args) {
             console.log("rols assigned");
           })
           .catch((err) => {
-            console.log(err);
+            console.log("err2", err);
           });
 
         message.guild.channels

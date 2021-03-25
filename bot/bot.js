@@ -47,7 +47,7 @@ client.on("message", (message) => {
     },
     {
       id: "718111655753416765",
-      line: "SUSHI MA'AM ZINDABAAD",
+      line: "SUSHI KO REDBULL DEDO PLSSSS",
     },
     {
       id: "693474602864738366",
