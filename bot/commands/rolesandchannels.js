@@ -86,7 +86,7 @@ async function execute(message, args) {
   participant.discordId = message.author.id;
   participant.discordTag = message.author.tag;
   participant.registeredOnDiscord = true;
-  console.log("teamTextChannel", teamTextChannel);
+  // console.log("teamTextChannel", teamTextChannel);
 
   await team.save();
   // await team.save();
