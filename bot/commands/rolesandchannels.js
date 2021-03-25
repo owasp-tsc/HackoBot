@@ -227,7 +227,7 @@ async function execute(message, args) {
         });
       });
     // team.textChannel = channel.id;
-    console.log(teamTextChannel);
+    console.log("teamTextChannel", teamTextChannel);
     team.textChannel = teamTextChannel;
     await team.save();
     // await team.save();
