@@ -123,11 +123,11 @@ client.on("message", (message) => {
     },
     {
       id: "762026111134728194",
-      line: "Arshia Main cute hoon mujhe maaf kardo",
+      line: "Arshia - Main cute hoon mujhe maaf kardo",
     },
     {
       id: "748962228316799042",
-      line: "Nipun ki kardo udte teer wala caption OP",
+      line: "Nipun0 - udte teer wala caption OP",
     },
   ];
 
