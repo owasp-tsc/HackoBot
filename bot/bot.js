@@ -27,11 +27,8 @@ client.once("ready", () => {
 
 const antiSpam = new AntiSpam(antiSpamConfig);
 const count = {};
-// app.set("count", count);
 
 client.on("message", (message) => {
-  // return;
-  // const count = app.get("count");
   if (
     !(
       message.channel.id === "789744750957428778" ||
@@ -81,18 +78,20 @@ client.on("message", (message) => {
       id: "693477263458566194",
       line: "CALL HER PALAK",
     },
+    {
+      id: "647148724958658579",
+      line: "ROHAN BHAIYA NE TOH FUNNY KARDIYA ",
+    },
   ];
 
   const OP = OP_LOG.find((op) => op.id === message.author.id);
   if (!OP) return;
-
-  if (OP.id in count) {
-    count[OP.id]++;
-    if (count[OP.id] >= 3) {
-      message.channel.send(OP.line);
-      count[OP.id] = 0;
-    }
-  } else count[OP.id] = 1;
+  if (!count[OP.id]) count[OP.id] = 0;
+  count[OP.id]++;
+  if (count[OP.id] >= 1) {
+    message.channel.send(OP.line);
+    count[OP.id] = 0;
+  }
 });
 
 client.on("message", (message) => {
