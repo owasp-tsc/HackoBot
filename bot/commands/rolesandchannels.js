@@ -48,7 +48,7 @@ async function execute(message, args) {
     return message.channel.send({
       embed: errorEmbed(
         `NOT REGISTERED`,
-        `${message.author} You are not registered on devfolio! Make sure to do RSPV or if done, we might update it in some time`
+        `${message.author} Either Your Team is not Formed or You are not registered on devfolio! Make sure to do RSPV or if done, we might update it in some time`
       ),
     }); //!
 
