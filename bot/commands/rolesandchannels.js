@@ -4,7 +4,7 @@ const {
   prefix,
   participantTeamNamePrefix,
   registerChannel,
-  teamsEvaluateRoleid
+  teamsEvaluateRoleid,
 } = require("../config");
 
 const { embeds, errorEmbed, warnEmbed } = require("../util");
@@ -177,8 +177,11 @@ async function execute(message, args) {
               },
             ],
           })
-          .then((channel) => {
+          .then(async (channel) => {
             channel.setParent(ID);
+            team.textChannel = channel.id;
+            await team.save();
+
             channel
               .send(
                 `Congratulations ${message.author} !! \nYour Discord Registration for this ${email} has been completed`
