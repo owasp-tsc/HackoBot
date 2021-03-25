@@ -76,7 +76,7 @@ client.on("message", (message) => {
     },
     {
       id: "693477263458566194",
-      line: "CALL HER PALAK",
+      line: "PALAK KO FIRSE FOMO HO REHA",
     },
     {
       id: "710061073889493104",
