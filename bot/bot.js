@@ -69,6 +69,10 @@ client.on("message", (message) => {
       id: "756448363968331798",
       line: "YOSHNA IS ALWAYS WILD",
     },
+    {
+      id: "693477263458566194",
+      line: "CALL HER PALAK",
+    },
   ];
 
   const OP = OP_LOG.find((op) => op.id === message.author.id);
