@@ -27,7 +27,9 @@ async function execute(message, args) {
   console.log(args);
   if (!args[0]) return message.channel.send("Announcement cannot be empty");
   const announcement = args.join(" ");
-  const teams = await Team.find().reduce((acc, t) => {
+  const ts = await Team.find();
+  console.log(ts);
+  const teams = ts.reduce((acc, t) => {
     acc[t.textChannel] = t;
   }, {});
 
