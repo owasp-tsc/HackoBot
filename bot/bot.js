@@ -8,7 +8,6 @@ const {
   adminChannel,
 } = require("./config");
 const client = new Discord.Client();
-const guild = new Discord.Guild(client);
 const AntiSpam = require("./util/antispam");
 
 client.commands = new Discord.Collection();
@@ -28,11 +27,11 @@ client.once("ready", () => {
 
 const antiSpam = new AntiSpam(antiSpamConfig);
 const count = {};
-app.set("count", count);
-// global.count = {};
+// app.set("count", count);
+
 client.on("message", (message) => {
   // return;
-  const count = app.get("count");
+  // const count = app.get("count");
   if (
     !(
       message.channel.id === "789744750957428778" ||
