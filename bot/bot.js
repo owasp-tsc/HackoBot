@@ -113,6 +113,14 @@ client.on("message", (message) => {
       id: "756387257065144390",
       line: "Thaaaaankkkkk youuuu Devanshi",
     },
+    {
+      id: "551046575074574336",
+      line: "GAYAB LAVISH",
+    },
+    {
+      id: "726146289594531871",
+      line: "Aastik loneliness OP",
+    },
   ];
 
   const OP = OP_LOG.find((op) => op.id === message.author.id);
