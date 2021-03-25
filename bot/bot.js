@@ -31,9 +31,12 @@ const count = {};
 client.on("message", (message) => {
   if (
     !(
-      message.channel.id === "789744750957428778" ||
-      message.channel.id === "821813318775472179" ||
-      message.channel.id === adminChannel.id
+      (
+        message.channel.id === "789744750957428778" ||
+        message.channel.id === "821813318775472179"
+      )
+      // ||
+      // message.channel.id === adminChannel.id
     )
   )
     return;
@@ -72,11 +75,11 @@ client.on("message", (message) => {
     },
     {
       id: "714412271023161405",
-      line: "Akshay bhai Isshmaart",
+      line: "Akshay geniusboii",
     },
     {
       id: "693477263458566194",
-      line: "CALL HER PALAK",
+      line: "PALAK KO FIRSE FOMO HO REHA",
     },
     {
       id: "710061073889493104",
@@ -85,6 +88,10 @@ client.on("message", (message) => {
     {
       id: "647148724958658579",
       line: "ROHAN BHAIYA NE TOH FUNNY KARDIYA ",
+    },
+    {
+      id: "482505313539457027",
+      line: "PRATEEK 9.34 wala",
     },
   ];
 

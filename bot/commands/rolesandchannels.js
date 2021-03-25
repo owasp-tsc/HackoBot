@@ -33,6 +33,7 @@ async function execute(message, args) {
   // return message.reply("You can't keep the team name blank!");
 
   const { value: email, error } = validateEmail(args[0]);
+
   if (error)
     return message.channel.send({
       embed: warnEmbed(`WARNING`, `Invalid Email Address`),
@@ -85,10 +86,14 @@ async function execute(message, args) {
   participant.discordId = message.author.id;
   participant.discordTag = message.author.tag;
   participant.registeredOnDiscord = true;
+  // console.log("teamTextChannel", teamTextChannel);
+
   await team.save();
+  // await team.save();
   participant.team = team._id;
   participant.teamNumber = team.number;
   await participant.save();
+  // let teamTextChannel;
 
   if (message.guild.roles.cache.find((r) => r.name === teamName)) {
     const role = message.guild.roles.cache.find((r) => r.name === teamName);
@@ -178,10 +183,15 @@ async function execute(message, args) {
             ],
           })
           .then(async (channel) => {
+            console.log("a");
+            console.log("ID", ID);
+
             channel.setParent(ID);
+
+            // teamTextChannel = channel.id;
             team.textChannel = channel.id;
             await team.save();
-
+            console.log("TEAM", team);
             channel
               .send(
                 `Congratulations ${message.author} !! \nYour Discord Registration for this ${email} has been completed`
@@ -224,11 +234,12 @@ async function execute(message, args) {
           // });
         });
       });
+    // team.textChannel = channel.id;
   } catch (error) {
     console.error(error);
     message.reply({
       embed: errorEmbed(
-        `ERROR`,
+        `ERROR `,
         `Error: Invalid command or Team can't be created!`
       ),
     });
