@@ -28,10 +28,11 @@ async function execute(message, args) {
   if (!args[0]) return message.channel.send("Announcement cannot be empty");
   const announcement = args.join(" ");
   const ts = await Team.find();
-  console.log(ts);
+
   const teams = ts.reduce((acc, t) => {
     acc[t.textChannel] = t;
   }, {});
+  console.log(teams);
 
   message.guild.channels.cache
     .filter((ch) => teams[ch.id] !== undefined)
@@ -44,5 +45,5 @@ async function execute(message, args) {
       });
     });
 
-  message.channel.send({ embed: embeds(null, "Announcement Done") });
+  message.channel.send({ embed: embeds(null, "Announcement Done ") });
 }
