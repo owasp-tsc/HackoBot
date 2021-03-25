@@ -86,10 +86,7 @@ async function execute(message, args) {
   participant.discordId = message.author.id;
   participant.discordTag = message.author.tag;
   participant.registeredOnDiscord = true;
-  await team.save();
-  participant.team = team._id;
-  participant.teamNumber = team.number;
-  await participant.save();
+
   let teamTextChannel;
 
   if (message.guild.roles.cache.find((r) => r.name === teamName)) {
@@ -230,8 +227,13 @@ async function execute(message, args) {
         });
       });
     // team.textChannel = channel.id;
+    console.log(teamTextChannel);
     team.textChannel = teamTextChannel;
     await team.save();
+    // await team.save();
+    participant.team = team._id;
+    participant.teamNumber = team.number;
+    await participant.save();
   } catch (error) {
     console.error(error);
     message.reply({
