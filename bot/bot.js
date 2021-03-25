@@ -93,6 +93,22 @@ client.on("message", (message) => {
       id: "482505313539457027",
       line: "PRATEEK 9.34 wala",
     },
+    {
+      id: "755271249072095282",
+      line: "PRAJIT - HINDI OP",
+    },
+    {
+      id: "631891628948324372",
+      line: "HIYA the professional slayer",
+    },
+    {
+      id: "755436589097812034",
+      line: "shutup naman xd",
+    },
+    {
+      id: "755284373703491654",
+      line: "Palak is without paneer",
+    },
   ];
 
   const OP = OP_LOG.find((op) => op.id === message.author.id);
