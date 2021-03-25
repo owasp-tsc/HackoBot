@@ -27,8 +27,12 @@ client.once("ready", () => {
 });
 
 const antiSpam = new AntiSpam(antiSpamConfig);
-
+const count = {};
+app.set("count", count);
+// global.count = {};
 client.on("message", (message) => {
+  // return;
+  const count = app.get("count");
   if (
     !(
       message.channel.id === "789744750957428778" ||
@@ -67,10 +71,17 @@ client.on("message", (message) => {
       line: "YOSHNA IS ALWAYS WILD",
     },
   ];
+
   const OP = OP_LOG.find((op) => op.id === message.author.id);
-  if (OP) {
-    message.channel.send(OP.line);
-  }
+  if (!OP) return;
+
+  if (OP.id in count) {
+    count[OP.id]++;
+    if (count[OP.id] === 3) {
+      message.channel.send(OP.line);
+      count[OP.id] = 0;
+    }
+  } else count[OP.id] = 1;
 });
 
 client.on("message", (message) => {
