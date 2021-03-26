@@ -43,7 +43,7 @@ client.on("message", (message) => {
   const OP_LOG = [
     {
       id: "729683555520610356",
-      line: "ARYAMAN SIR KHATRA",
+      line: "ARYAMAN SIR KHATRA DESIGNER",
     },
     {
       id: "718111655753416765",
@@ -95,7 +95,7 @@ client.on("message", (message) => {
     },
     {
       id: "755271249072095282",
-      line: "PRAJIT - BHAI TAGLINE DELETE NAHI HOGI",
+      line: "PRAJIT - BRO TAGLINE DELETE NAHI HOGI",
     },
     {
       id: "631891628948324372",
