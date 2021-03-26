@@ -75,7 +75,7 @@ client.on("message", (message) => {
     },
     {
       id: "714412271023161405",
-      line: "Akshay geniusboii",
+      line: "Akshay jingle bell geniusboii",
     },
     {
       id: "693477263458566194",
