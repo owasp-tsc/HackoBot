@@ -59,7 +59,7 @@ client.on("message", (message) => {
     },
     {
       id: "693157266416992277",
-      line: "FABHIL OPP",
+      line: "FABHIL OOOOOOOOOO NICEEE",
     },
     {
       id: "694529909032222832",
@@ -95,7 +95,7 @@ client.on("message", (message) => {
     },
     {
       id: "755271249072095282",
-      line: "PRAJIT - HINDI OP",
+      line: "PRAJIT - BHAI TAGLINE DELETE NAHI HOGI",
     },
     {
       id: "631891628948324372",
@@ -128,6 +128,10 @@ client.on("message", (message) => {
     {
       id: "748962228316799042",
       line: "Nipun - udte teer wala caption OP",
+    },
+    {
+      id: "634420937671835679",
+      line: "GOVIND BHAIYA ANGUR KHA RAHE HAIN",
     },
     // {
     //   id: "485753782626418688",
