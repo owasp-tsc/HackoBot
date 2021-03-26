@@ -111,7 +111,7 @@ client.on("message", (message) => {
     },
     {
       id: "756387257065144390",
-      line: "Thaaaaankkkkk youuuu Devanshi",
+      line: "Devanshi ULTRA MODEST",
     },
     {
       id: "551046575074574336",
@@ -133,10 +133,6 @@ client.on("message", (message) => {
       id: "634420937671835679",
       line: "GOVIND BHAIYA ANGUR KHA RAHE HAIN",
     },
-    // {
-    //   id: "485753782626418688",
-    //   line: "Harshit - ",
-    // },
   ];
 
   const OP = OP_LOG.find((op) => op.id === message.author.id);
