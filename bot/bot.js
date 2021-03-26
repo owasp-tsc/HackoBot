@@ -127,8 +127,12 @@ client.on("message", (message) => {
     },
     {
       id: "748962228316799042",
-      line: "Nipun0 - udte teer wala caption OP",
+      line: "Nipun - udte teer wala caption OP",
     },
+    // {
+    //   id: "485753782626418688",
+    //   line: "Harshit - ",
+    // },
   ];
 
   const OP = OP_LOG.find((op) => op.id === message.author.id);
