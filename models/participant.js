@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 //! add length and stuff
+const {eventDB}= require('../init/db');
 const participantSchema = mongoose.Schema(
   {
     team: {
@@ -31,18 +32,13 @@ const participantSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    firstName: {
+    profilePicLink : String,
+    phoneNo : Number,
+    rollNo : Number,
+    year : String,
+    name: {
       type: String,
       required: true,
-    },
-    lastName: {
-      type: String,
-    },
-    T_ShirtSize: {
-      type: String,
-    },
-    gender: {
-      type: String,
     },
     college: {
       type: String,
@@ -51,22 +47,6 @@ const participantSchema = mongoose.Schema(
       type: String,
       unique: true,
       required: true,
-    },
-
-    devfolio: {
-      type: String,
-    },
-    project: {
-      type: String,
-    },
-    projectTracks: {
-      type: String,
-    },
-    winner: {
-      type: String,
-    },
-    field12: {
-      type: String,
     },
     stage: {
       type: String,
@@ -77,6 +57,6 @@ const participantSchema = mongoose.Schema(
   }
 );
 
-const Participant = mongoose.model("participant", participantSchema);
+const Participant = eventDB.model("participant", participantSchema);
 
 module.exports = Participant;

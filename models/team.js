@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 //! add length and stuff
+const {eventDB}= require('../init/db');
 const teamSchema = mongoose.Schema(
   {
     name: { type: String, required: true, unique: true },
@@ -14,6 +15,6 @@ const teamSchema = mongoose.Schema(
   }
 );
 
-const Team = mongoose.model("Team", teamSchema);
+const Team = eventDB.model("Team", teamSchema);
 
 module.exports = Team;

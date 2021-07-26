@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 //! add length and stuff
+const {eventDB}= require('../init/db');
 const faqSchema = mongoose.Schema(
   {
     question: {
@@ -40,6 +41,6 @@ const faqSchema = mongoose.Schema(
   }
 );
 
-const Faq = mongoose.model("faq", faqSchema);
+const Faq = eventDB.model("faq", faqSchema);
 
 module.exports = Faq;

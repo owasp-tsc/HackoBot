@@ -6,22 +6,26 @@ if (process.env.NODE_ENV !== "production") {
   require("dotenv").config({ path: "./.env.dev" });
 }
 
+
+
 const mongoose = require("mongoose");
 
 // * DB
-mongoose.connect(
-  process.env.MONGO_URI,
-  {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-    useUnifiedTopology: true,
-  },
-  (err) => {
-    if (err) return console.log("Connection to MongoDB failed.\n", err);
-    console.log("Connected to MongoDB");
-  }
-);
+// mongoose.connect(
+//   process.env.MONGO_URI,
+//   {
+//     useNewUrlParser: true,
+//     useCreateIndex: true,
+//     useFindAndModify: false,
+//     useUnifiedTopology: true,
+//   },
+//   (err) => {
+//     if (err) return console.log("Connection to MongoDB failed.\n", err);
+//     console.log("Connected to MongoDB");
+//   }
+// );
+
+require("./init/db");
 
 // * Server
 const port = process.env.PORT || 5000;

@@ -15,11 +15,11 @@ module.exports = async function (csvPath) {
               temp[0] = temp[0].toLocaleLowerCase();
               userProp = temp.join("").replace("-", "_");
               obj[userProp] = participantJSON[key];
-
               return obj;
             },
             {}
           );
+          console.log(participant);
           if (participant.teamName === "N/A") return;
           // console.log(participant);
           const newParticipant = new Participant({

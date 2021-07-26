@@ -1,5 +1,8 @@
 const Participant = require("../../models/participant");
 const Team = require("../../models/team");
+const CParticipant = require('../../models/participantCommon');
+const CTeam = require('../../models/BaseTeam');
+const mongoose = require('mongoose')
 const {
   prefix,
   participantTeamNamePrefix,
@@ -39,19 +42,33 @@ async function execute(message, args) {
       embed: warnEmbed(`WARNING`, `Invalid Email Address`),
     });
 
-  const [participant] = await Participant.find({
+  const [cparticipant] = await CParticipant.find({
     email,
-  }).select(["email", "registeredOnDiscord", "teamName"]);
+  });
   //! check stage ?
   // console.log(participant);
-  if (!participant)
+  if (!cparticipant)
     return message.channel.send({
       embed: errorEmbed(
         `NOT REGISTERED`,
         `${message.author} Either Your Team is not Formed or You are not registered on devfolio! Make sure to do RSPV or if done, we will update it in some time`
       ),
     }); //!
-
+    console.log(cparticipant);
+    const availTeam= await CTeam.findOne({event :mongoose.Types.ObjectId("5fd09a8bb042c9b984d7cbb1") , members: mongoose.Types.ObjectId(cparticipant._id)});
+    console.log(availTeam)
+    if(!availTeam)
+    return message.channel.send({
+      embed: errorEmbed(
+        `NO TEAM FOUND`,
+        `${message.author} Either Your Team is not Formed or You are not registered on devfolio! Make sure to do RSPV or if done, we will update it in some time`
+      ),
+    }); 
+    delete cparticipant["_id"]
+    const participant= new Participant({
+      ...cparticipant.toJSON()
+    })
+    participant.teamName=availTeam.toJSON().teamName;
   if (participant.registeredOnDiscord)
     return message.channel.send({
       embed: warnEmbed(
@@ -60,19 +77,20 @@ async function execute(message, args) {
       ),
     });
 
-  let team = await Team.findOne({ name: participant.teamName });
+  let team = await Team.findOne({ name: availTeam.teamName });
   if (!team) {
     let teamNumber = await Team.find().count();
     // if (teamNumber === 0) teamNumber++;
+    console.log("Team Name ",availTeam)
     team = new Team({
-      name: participant.teamName,
+      name: availTeam.toJSON().teamName,
       number: teamNumber + 1,
     });
   }
 
   //role name
   const teamName =
-    participantTeamNamePrefix + `${team.number}-` + participant.teamName;
+    participantTeamNamePrefix + `${team.number}-` + availTeam.toJSON().teamName;
   // if role already exist
   if (
     message.member.roles.cache.some((r) =>
@@ -93,7 +111,7 @@ async function execute(message, args) {
   participant.team = team._id;
   participant.teamNumber = team.number;
   await participant.save();
-  // let teamTextChannel;
+  let teamTextChannel;
 
   if (message.guild.roles.cache.find((r) => r.name === teamName)) {
     const role = message.guild.roles.cache.find((r) => r.name === teamName);
@@ -128,16 +146,16 @@ async function execute(message, args) {
         },
       })
       .then((role) => {
-        // console.log(role);
         message.member.roles
-          .add(role)
-          .then((ff) => {
-            console.log("rols assigned");
-          })
-          .catch((err) => {
-            console.log("err2", err);
-          });
-
+        .add(role)
+        .then((ff) => {
+          console.log("rols assigned");
+        })
+        .catch((err) => {
+          console.log("err2", err);
+        });
+        
+        // console.log(role);
         message.guild.channels
           .create(teamName, {
             name: teamName,
@@ -151,13 +169,14 @@ async function execute(message, args) {
                 id: role.id,
                 allow: ["VIEW_CHANNEL"],
               },
-              {
-                id: teamsEvaluateRoleid,
-                allow: ["VIEW_CHANNEL"],
-              },
+              // {
+              //   id: teamsEvaluateRoleid,
+              //   allow: ["VIEW_CHANNEL"],
+              // },
             ],
           })
           .then((channel) => {
+            // console.log(channel);
             ID = channel.id;
           });
 
@@ -176,10 +195,10 @@ async function execute(message, args) {
                 id: role.id,
                 allow: ["VIEW_CHANNEL"],
               },
-              {
-                id: teamsEvaluateRoleid,
-                allow: ["VIEW_CHANNEL"],
-              },
+              // {
+              //   id: teamsEvaluateRoleid,
+              //   allow: ["VIEW_CHANNEL"],
+              // },
             ],
           })
           .then(async (channel) => {
@@ -215,10 +234,10 @@ async function execute(message, args) {
                 id: role.id,
                 allow: ["VIEW_CHANNEL"],
               },
-              {
-                id: teamsEvaluateRoleid,
-                allow: ["VIEW_CHANNEL"],
-              },
+              // {
+              //   id: teamsEvaluateRoleid,
+              //   allow: ["VIEW_CHANNEL"],
+              // },
             ],
           })
           .then((channel) => {
@@ -234,7 +253,6 @@ async function execute(message, args) {
           // });
         });
       });
-    // team.textChannel = channel.id;
   } catch (error) {
     console.error(error);
     message.reply({

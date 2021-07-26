@@ -175,6 +175,6 @@ client.on("message", (message) => {
   }
 });
 
-require("./util/initParticipantsFromCSV")(participantsCSVPath);
+// require("./util/initParticipantsFromCSV")(participantsCSVPath);
 
 client.login(process.env.BOT_SECRET_TOKEN);
