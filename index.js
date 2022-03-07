@@ -27,7 +27,7 @@ mongoose.connect(
 const port = process.env.PORT || 5000;
 const server = app.listen(port, console.log(`Server started on port ${port}`));
 
-app.get("/", (req, res) => res.send("ROOT "));
+app.get("/", (req, res) => res.send("ROOT GG"));
 
 const { validateEmail } = require("./bot/validators");
 const Participant = require("./models/participant");
