@@ -94,7 +94,7 @@ async function execute(message, args) {
   participant.teamNumber = team.number;
   await participant.save();
   // let teamTextChannel;
-
+  console.log("teamName",teamName)
   if (message.guild.roles.cache.find((r) => r.name === teamName)) {
     const role = message.guild.roles.cache.find((r) => r.name === teamName);
     return message.member.roles
@@ -116,10 +116,10 @@ async function execute(message, args) {
         console.log("err", err);
       });
   }
-
+  console.log(123)
   let ID;
   try {
-    message.guild.roles
+   let roleId=await message.guild.roles
       .create({
         data: {
           name: teamName,
@@ -127,10 +127,9 @@ async function execute(message, args) {
           permissions: ["SEND_MESSAGES", "VIEW_CHANNEL"],
         },
       })
-      .then((role) => {
-        // console.log(role);
-        message.member.roles
-          .add(role)
+
+      message.member.roles
+          .add(roleId)
           .then((ff) => {
             console.log("rols assigned");
           })
@@ -138,7 +137,11 @@ async function execute(message, args) {
             console.log("err2", err);
           });
 
-        message.guild.channels
+      // .then((role) => {
+        // console.log(role);
+        
+
+        let channelID = await message.guild.channels
           .create(teamName, {
             name: teamName,
             type: "category",
@@ -148,22 +151,22 @@ async function execute(message, args) {
                 deny: ["VIEW_CHANNEL"],
               },
               {
-                id: role.id,
+                id: roleId.id,
                 allow: ["VIEW_CHANNEL"],
               },
-              {
-                id: teamsEvaluateRoleid,
-                allow: ["VIEW_CHANNEL"],
-              },
+              // {
+              //   id: teamsEvaluateRoleid,
+              //   allow: ["VIEW_CHANNEL"],
+              // },
             ],
           })
-          .then((channel) => {
-            ID = channel.id;
-          });
+          // .then((channel) => {
+          ID = channelID.id;
+          // });
 
         // creating text channel
 
-        message.guild.channels
+      let textChannel= await message.guild.channels
           .create(teamName, {
             name: teamName,
             type: "text",
@@ -173,36 +176,36 @@ async function execute(message, args) {
                 deny: ["VIEW_CHANNEL"],
               },
               {
-                id: role.id,
+                id: roleId.id,
                 allow: ["VIEW_CHANNEL"],
               },
-              {
-                id: teamsEvaluateRoleid,
-                allow: ["VIEW_CHANNEL"],
-              },
+              // {
+              //   id: teamsEvaluateRoleid,
+              //   allow: ["VIEW_CHANNEL"],
+              // },
             ],
           })
-          .then(async (channel) => {
+          // .then(async (channel) => {
             console.log("a");
             console.log("ID", ID);
 
-            channel.setParent(ID);
+            textChannel.setParent(ID);
 
             // teamTextChannel = channel.id;
-            team.textChannel = channel.id;
+            team.textChannel = textChannel.id;
             await team.save();
             console.log("TEAM", team);
-            channel
+            textChannel
               .send(
                 `Congratulations ${message.author} !! \nYour Discord Registration for this ${email} has been completed`
               )
               .then((gg) => {
                 gg.react("☺️");
               });
-          });
+          // });
 
         // creating voice channel
-        message.guild.channels
+       let voiceChannel =await message.guild.channels
           .create(teamName, {
             name: teamName,
             type: "voice",
@@ -212,18 +215,18 @@ async function execute(message, args) {
                 deny: ["VIEW_CHANNEL"],
               },
               {
-                id: role.id,
+                id: roleId.id,
                 allow: ["VIEW_CHANNEL"],
               },
-              {
-                id: teamsEvaluateRoleid,
-                allow: ["VIEW_CHANNEL"],
-              },
+              // {
+              //   id: teamsEvaluateRoleid,
+              //   allow: ["VIEW_CHANNEL"],
+              // },
             ],
           })
-          .then((channel) => {
-            channel.setParent(ID);
-          });
+          // .then((channel) => {
+            voiceChannel.setParent(ID);
+          // });
         message.channel.bulkDelete(1, true).catch((err) => {
           console.log("Err", err.message);
           // message.reply({
@@ -233,7 +236,7 @@ async function execute(message, args) {
           //   ),
           // });
         });
-      });
+      // });
     // team.textChannel = channel.id;
   } catch (error) {
     console.error(error);

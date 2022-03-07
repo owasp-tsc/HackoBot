@@ -7,15 +7,15 @@ module.exports = {
   },
   registerChannel: {
     name: "team-registration",
-    id: "824262095725658132",
+    id: "950410066044022864",
   },
   helpChannel: {
-    name: "faq",
-    id: "821728004039507978",
+    name: "❓-faqs",
+    id: "939543549735759892",
   },
   announcementChannel: {
-    name: "announcement",
-    id: "824579867869315125",
+    name: "📌-announcements",
+    id: "936536465515642920",
   },
   participantsRoleId: "785088756070744065",
   teamsEvaluateRoleid: "822145050410352690",
